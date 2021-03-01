@@ -16,9 +16,9 @@ class TestDefaultController(BaseTestCase):
 
         get controller configuration
         """
-        query_string = [('neid', 'neid_example'),
-                        ('xpath', 'xpath_example'),
-                        ('ns_map', 'ns_map_example')]
+        query_string = [('neid', 'route 0'),
+                        ('xpath', '/a:interfaces'),
+                        ('ns_map', '{"a": "urn:ietf:params:xml:ns:yang:ietf-interfaces"}')]
         response = self.client.open(
             '/v1/mediatorservice/get_controller_config',
             method='GET',
@@ -31,9 +31,9 @@ class TestDefaultController(BaseTestCase):
 
         get device configuration
         """
-        query_string = [('neid', 'neid_example'),
-                        ('xpath', 'xpath_example'),
-                        ('ns_map', 'ns_map_example')]
+        query_string = [('neid', 'route 0'),
+                        ('xpath', '/a:ifm'),
+                        ('ns_map', '{"a": "urn:huawei:yang:huawei-ifm"}')]
         response = self.client.open(
             '/v1/mediatorservice/get_device_config',
             method='GET',
@@ -46,7 +46,7 @@ class TestDefaultController(BaseTestCase):
 
         get device information
         """
-        query_string = [('neid', 'neid_example')]
+        query_string = [('neid', 'route 0')]
         response = self.client.open(
             '/v1/mediatorservice/get_device_info',
             method='GET',
