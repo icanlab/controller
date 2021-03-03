@@ -7,6 +7,7 @@ import swagger_server
 from flask import current_app
 from lxml import etree
 from swagger_server import util
+from swagger_server.core.util import make_response_json, make_response_xml
 
 swagger_root = os.path.dirname(swagger_server.__file__)
 swagger_test = os.path.join(swagger_root, 'test')
@@ -60,8 +61,7 @@ def get_controller_config(neid, xpath, ns_map):  # noqa: E501
     """
     ns_map = json.loads(ns_map)
     controller_config = temp_query_controller_config(neid, xpath, ns_map)
-    result = etree.tostring(controller_config, encoding='utf-8', pretty_print=True).decode()
-    return current_app.response_class(result, mimetype="application/xml")
+    return make_response_xml(controller_config)
 
 
 def get_device_config(neid, xpath, ns_map):  # noqa: E501
@@ -80,8 +80,7 @@ def get_device_config(neid, xpath, ns_map):  # noqa: E501
     """
     ns_map = json.loads(ns_map)
     device_config = temp_query_device_config(neid, xpath, ns_map)
-    result = etree.tostring(device_config, encoding='utf-8', pretty_print=True).decode()
-    return current_app.response_class(result, mimetype="application/xml")
+    return make_response_xml(device_config)
 
 
 def get_device_info(neid):  # noqa: E501
@@ -100,4 +99,4 @@ def get_device_info(neid):  # noqa: E501
         mediator_device_product='HUAWEIOS',
         mediator_device_version='1.0.1111.2',
     )
-    return device_info
+    return make_response_json(device_info)
