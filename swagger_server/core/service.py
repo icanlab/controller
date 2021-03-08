@@ -3,6 +3,7 @@ import logging
 import subprocess
 
 from lxml import etree
+from ncclient import manager
 
 logger = logging.getLogger(__name__)
 
@@ -122,25 +123,21 @@ def query_device_config(neid, xpath, namespaces=None):
         Device configuration.
     """
 
-    # TODO: command incomplete
-    args = ["ansible", neid]
-    try:
-        p = subprocess.run(args, capture_output=True, check=True)
-        data = json.loads(p.stdout)
-    except subprocess.CalledProcessError as e:
-        msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
-        logger.error(msg)
-        raise AnsibleCommandError(msg)
-    except Exception as e:
-        msg = "System error"
-        logger.error(msg + ": " + str(e))
-        raise AnsibleCommandError(msg)
+    data = _ansible_inventory_host(neid)
 
-    # TODO: parse ansible output
-    device_config = etree.fromstring(data["xxx"])
-    result = device_config.xpath(xpath, namespaces=namespaces)
-    if not result:
-        msg = "Device configuration '%s' for neid '%s' not exists" % (xpath, neid)
-        logger.error(msg)
-        raise QueryError(msg)
-    return result[0]
+    host = data.get("ansible_ssh_host")
+    if host is None:
+        host = data.get("ansible_host")
+    port = data.get("ansible_ssh_port")
+    if port is None:
+        port = data.get("ansible_port")
+    username = data.get("ansible_ssh_user")
+    if username is None:
+        username = data.get("ansible_user")
+    password = data.get("ansible_ssh_pass")
+    if password is None:
+        password = data.get("ansible_pass")
+
+    conn = manager.connect(host=host, port=port, username=username, password=password, hostkey_verify=False)
+    reply = conn.get_config(source='running', filter=('xpath', (namespaces, xpath)))
+    return reply.data_xml
