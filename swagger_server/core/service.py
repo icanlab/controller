@@ -25,7 +25,7 @@ def _ansible_inventory_host(host):
     args = ["ansible-inventory", "--host", host]
     try:
         p = subprocess.run(args, capture_output=True, check=True)
-        data = json.loads(p.stdout)
+        inventory = json.loads(p.stdout)
     except subprocess.CalledProcessError as e:
         msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
         logger.error(msg)
@@ -34,7 +34,7 @@ def _ansible_inventory_host(host):
         msg = "System error"
         logger.error(msg + ": " + str(e))
         raise AnsibleCommandError(msg)
-    return data
+    return inventory
 
 
 def query_device_info(neid):
@@ -52,12 +52,12 @@ def query_device_info(neid):
         as dict keys.
     """
 
-    data = _ansible_inventory_host(neid)
+    inventory = _ansible_inventory_host(neid)
 
-    vendor = data.get("mediator_device_vendor")
-    type = data.get("mediator_device_type")
-    product = data.get("mediator_device_product")
-    version = data.get("mediator_device_version")
+    vendor = inventory.get("mediator_device_vendor")
+    type = inventory.get("mediator_device_type")
+    product = inventory.get("mediator_device_product")
+    version = inventory.get("mediator_device_version")
 
     # Check for missing device information.
     if vendor is None:
@@ -123,20 +123,20 @@ def query_device_config(neid, xpath, namespaces=None):
         Device configuration.
     """
 
-    data = _ansible_inventory_host(neid)
+    inventory = _ansible_inventory_host(neid)
 
-    host = data.get("ansible_ssh_host")
+    host = inventory.get("ansible_ssh_host")
     if host is None:
-        host = data.get("ansible_host")
-    port = data.get("ansible_ssh_port")
+        host = inventory.get("ansible_host")
+    port = inventory.get("ansible_ssh_port")
     if port is None:
-        port = data.get("ansible_port")
-    username = data.get("ansible_ssh_user")
+        port = inventory.get("ansible_port")
+    username = inventory.get("ansible_ssh_user")
     if username is None:
-        username = data.get("ansible_user")
-    password = data.get("ansible_ssh_pass")
+        username = inventory.get("ansible_user")
+    password = inventory.get("ansible_ssh_pass")
     if password is None:
-        password = data.get("ansible_pass")
+        password = inventory.get("ansible_pass")
 
     conn = manager.connect(host=host, port=port, username=username, password=password, hostkey_verify=False)
     reply = conn.get_config(source='running', filter=('xpath', (namespaces, xpath)))
