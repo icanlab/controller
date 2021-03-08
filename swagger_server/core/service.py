@@ -138,6 +138,23 @@ def query_device_config(neid, xpath, namespaces=None):
     if password is None:
         password = inventory.get("ansible_pass")
 
+    if host is None:
+        msg = "Cannot find host for neid '{}'" % host
+        logger.error(msg)
+        raise QueryError(msg)
+    if port is None:
+        msg = "Cannot find port for neid '{}'" % port
+        logger.error(msg)
+        raise QueryError(msg)
+    if username is None:
+        msg = "Cannot find username for neid '{}'" % username
+        logger.error(msg)
+        raise QueryError(msg)
+    if password is None:
+        msg = "Cannot find password for neid '{}'" % password
+        logger.error(msg)
+        raise QueryError(msg)
+
     conn = manager.connect(
         host=host, port=port, username=username, password=password, hostkey_verify=False
     )
