@@ -21,7 +21,7 @@ class QueryError(MediatorServiceError):
 
 
 def _ansible_inventory_host(host):
-    # Execute Ansible command to fetch device information in the inventory.
+    # Execute Ansible command to fetch host information in the inventory.
     args = ["ansible-inventory", "--host", host]
     try:
         p = subprocess.run(args, capture_output=True, check=True)
@@ -125,6 +125,8 @@ def query_device_config(neid, xpath, namespaces=None):
 
     inventory = _ansible_inventory_host(neid)
 
+    # Since Ansible 2.0, variables like ansible_ssh_* are deprecated. However,
+    # they are used by HUAWEI NE Plugin.
     host = inventory.get("ansible_ssh_host")
     if host is None:
         host = inventory.get("ansible_host")
@@ -159,4 +161,4 @@ def query_device_config(neid, xpath, namespaces=None):
         host=host, port=port, username=username, password=password, hostkey_verify=False
     )
     reply = conn.get_config(source="running", filter=("xpath", (namespaces, xpath)))
-    return reply.data_xml
+    return reply.data_ele[0]
