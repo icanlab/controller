@@ -19,6 +19,23 @@ class QueryError(MediatorServiceError):
     """Query error occurred."""
 
 
+def _ansible_inventory_host(host):
+    # Execute Ansible command to fetch device information in the inventory.
+    args = ["ansible-inventory", "--host", host]
+    try:
+        p = subprocess.run(args, capture_output=True, check=True)
+        data = json.loads(p.stdout)
+    except subprocess.CalledProcessError as e:
+        msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
+        logger.error(msg)
+        raise AnsibleCommandError(msg)
+    except Exception as e:
+        msg = "System error"
+        logger.error(msg + ": " + str(e))
+        raise AnsibleCommandError(msg)
+    return data
+
+
 def query_device_info(neid):
     """Query device information.
 
@@ -34,24 +51,12 @@ def query_device_info(neid):
         as dict keys.
     """
 
-    # Execute Ansible command to fetch device information in the inventory.
-    args = ["ansible-inventory", "--host", neid]
-    try:
-        p = subprocess.run(args, capture_output=True, check=True)
-        data = json.loads(p.stdout)
-    except subprocess.CalledProcessError as e:
-        msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
-        logger.error(msg)
-        raise AnsibleCommandError(msg)
-    except Exception as e:
-        msg = "System error"
-        logger.error(msg + ": " + str(e))
-        raise AnsibleCommandError(msg)
+    data = _ansible_inventory_host(neid)
 
-    vendor = data.get("mediator_device_vendor", None)
-    type = data.get("mediator_device_type", None)
-    product = data.get("mediator_device_product", None)
-    version = data.get("mediator_device_version", None)
+    vendor = data.get("mediator_device_vendor")
+    type = data.get("mediator_device_type")
+    product = data.get("mediator_device_product")
+    version = data.get("mediator_device_version")
 
     # Check for missing device information.
     if vendor is None:
