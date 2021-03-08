@@ -44,6 +44,16 @@ def temp_query_device_config(neid, xpath, ns_map):
     return root.xpath(xpath, namespaces=ns_map)[0]
 
 
+def temp_query_device_info(neid):
+    device_info = dict(
+        mediator_device_vendor='HUAWEI',
+        mediator_device_type='ROUTER6500',
+        mediator_device_product='HUAWEIOS',
+        mediator_device_version='1.0.1111.2',
+    )
+    return device_info
+
+
 def get_controller_config(neid, xpath, ns_map):  # noqa: E501
     """get controller configuration
 
@@ -58,8 +68,12 @@ def get_controller_config(neid, xpath, ns_map):  # noqa: E501
 
     :rtype: str
     """
-    ns_map = json.loads(ns_map)
-    controller_config = temp_query_controller_config(neid, xpath, ns_map)
+    try:
+        ns_map = json.loads(ns_map)
+        controller_config = temp_query_controller_config(neid, xpath, ns_map)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
     return make_response_xml(controller_config)
 
 
@@ -77,8 +91,12 @@ def get_device_config(neid, xpath, ns_map):  # noqa: E501
 
     :rtype: str
     """
-    ns_map = json.loads(ns_map)
-    device_config = temp_query_device_config(neid, xpath, ns_map)
+    try:
+        ns_map = json.loads(ns_map)
+        device_config = temp_query_device_config(neid, xpath, ns_map)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
     return make_response_xml(device_config)
 
 
@@ -92,10 +110,9 @@ def get_device_info(neid):  # noqa: E501
 
     :rtype: str
     """
-    device_info = dict(
-        mediator_device_vendor='HUAWEI',
-        mediator_device_type='ROUTER6500',
-        mediator_device_product='HUAWEIOS',
-        mediator_device_version='1.0.1111.2',
-    )
+    try:
+        device_info = temp_query_device_info(neid)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
     return make_response_json(device_info)
