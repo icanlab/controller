@@ -4,7 +4,6 @@ import os
 import connexion
 import six
 import swagger_server
-from flask import current_app
 from lxml import etree
 from swagger_server import util
 from swagger_server.core.util import make_response_json, make_response_xml
