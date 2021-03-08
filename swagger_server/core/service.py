@@ -138,6 +138,8 @@ def query_device_config(neid, xpath, namespaces=None):
     if password is None:
         password = inventory.get("ansible_pass")
 
-    conn = manager.connect(host=host, port=port, username=username, password=password, hostkey_verify=False)
-    reply = conn.get_config(source='running', filter=('xpath', (namespaces, xpath)))
+    conn = manager.connect(
+        host=host, port=port, username=username, password=password, hostkey_verify=False
+    )
+    reply = conn.get_config(source="running", filter=("xpath", (namespaces, xpath)))
     return reply.data_xml
