@@ -3,6 +3,7 @@ import logging
 import subprocess
 
 from lxml import etree
+from ncclient import manager
 
 logger = logging.getLogger(__name__)
 
@@ -20,11 +21,11 @@ class QueryError(MediatorServiceError):
 
 
 def _ansible_inventory_host(host):
-    # Execute Ansible command to fetch device information in the inventory.
+    # Execute Ansible command to fetch host information in the inventory.
     args = ["ansible-inventory", "--host", host]
     try:
         p = subprocess.run(args, capture_output=True, check=True)
-        data = json.loads(p.stdout)
+        inventory = json.loads(p.stdout)
     except subprocess.CalledProcessError as e:
         msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
         logger.error(msg)
@@ -33,7 +34,7 @@ def _ansible_inventory_host(host):
         msg = "System error"
         logger.error(msg + ": " + str(e))
         raise AnsibleCommandError(msg)
-    return data
+    return inventory
 
 
 def query_device_info(neid):
@@ -51,12 +52,12 @@ def query_device_info(neid):
         as dict keys.
     """
 
-    data = _ansible_inventory_host(neid)
+    inventory = _ansible_inventory_host(neid)
 
-    vendor = data.get("mediator_device_vendor")
-    type = data.get("mediator_device_type")
-    product = data.get("mediator_device_product")
-    version = data.get("mediator_device_version")
+    vendor = inventory.get("mediator_device_vendor")
+    type = inventory.get("mediator_device_type")
+    product = inventory.get("mediator_device_product")
+    version = inventory.get("mediator_device_version")
 
     # Check for missing device information.
     if vendor is None:
@@ -122,25 +123,42 @@ def query_device_config(neid, xpath, namespaces=None):
         Device configuration.
     """
 
-    # TODO: command incomplete
-    args = ["ansible", neid]
-    try:
-        p = subprocess.run(args, capture_output=True, check=True)
-        data = json.loads(p.stdout)
-    except subprocess.CalledProcessError as e:
-        msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
-        logger.error(msg)
-        raise AnsibleCommandError(msg)
-    except Exception as e:
-        msg = "System error"
-        logger.error(msg + ": " + str(e))
-        raise AnsibleCommandError(msg)
+    inventory = _ansible_inventory_host(neid)
 
-    # TODO: parse ansible output
-    device_config = etree.fromstring(data["xxx"])
-    result = device_config.xpath(xpath, namespaces=namespaces)
-    if not result:
-        msg = "Device configuration '%s' for neid '%s' not exists" % (xpath, neid)
+    # Since Ansible 2.0, variables like ansible_ssh_* are deprecated. However,
+    # they are used by HUAWEI NE Plugin.
+    host = inventory.get("ansible_ssh_host")
+    if host is None:
+        host = inventory.get("ansible_host")
+    port = inventory.get("ansible_ssh_port")
+    if port is None:
+        port = inventory.get("ansible_port")
+    username = inventory.get("ansible_ssh_user")
+    if username is None:
+        username = inventory.get("ansible_user")
+    password = inventory.get("ansible_ssh_pass")
+    if password is None:
+        password = inventory.get("ansible_pass")
+
+    if host is None:
+        msg = "Cannot find host for neid '{}'" % host
         logger.error(msg)
         raise QueryError(msg)
-    return result[0]
+    if port is None:
+        msg = "Cannot find port for neid '{}'" % port
+        logger.error(msg)
+        raise QueryError(msg)
+    if username is None:
+        msg = "Cannot find username for neid '{}'" % username
+        logger.error(msg)
+        raise QueryError(msg)
+    if password is None:
+        msg = "Cannot find password for neid '{}'" % password
+        logger.error(msg)
+        raise QueryError(msg)
+
+    conn = manager.connect(
+        host=host, port=port, username=username, password=password, hostkey_verify=False
+    )
+    reply = conn.get_config(source="running", filter=("xpath", (namespaces, xpath)))
+    return reply.data_ele[0]
