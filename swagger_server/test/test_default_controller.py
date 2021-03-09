@@ -23,6 +23,8 @@ class TestDefaultController(BaseTestCase):
             '/v1/mediatorservice/get_controller_config',
             method='GET',
             query_string=query_string)
+        print()
+        print(response.get_data().decode())
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -38,6 +40,8 @@ class TestDefaultController(BaseTestCase):
             '/v1/mediatorservice/get_device_config',
             method='GET',
             query_string=query_string)
+        print()
+        print(response.get_data().decode())
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -51,6 +55,8 @@ class TestDefaultController(BaseTestCase):
             '/v1/mediatorservice/get_device_info',
             method='GET',
             query_string=query_string)
+        print()
+        print(response.get_data().decode())
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
