@@ -125,8 +125,8 @@ def query_device_config(neid, xpath, namespaces=None):
 
     inventory = _ansible_inventory_host(neid)
 
-    # Since Ansible 2.0, variables like ansible_ssh_* are deprecated. However,
-    # they are used by HUAWEI NE Plugin.
+    # Since Ansible 2.0, variables like ansible_ssh_* have been deprecated.
+    # However, they are widely used by HUAWEI NE Plugin.
     host = inventory.get("ansible_ssh_host")
     if host is None:
         host = inventory.get("ansible_host")
