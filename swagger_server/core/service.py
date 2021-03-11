@@ -140,6 +140,7 @@ def query_device_config(neid, xpath, namespaces=None):
     if password is None:
         password = inventory.get("ansible_pass")
 
+    # Check for missing device connection information.
     if host is None:
         msg = "Cannot find host for neid '{}'" % host
         logger.error(msg)
