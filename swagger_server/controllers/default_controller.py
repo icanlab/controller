@@ -13,7 +13,7 @@ swagger_test = os.path.join(swagger_root, 'test')
 
 
 def temp_query_controller_config(neid, xpath, ns_map):
-    name = xpath[xpath.rfind(':')+1:]
+    name = xpath[xpath.rfind(':') + 1:]
     if 'interfaces' == name:
         filepath = os.path.join(swagger_test, 'controller_current_configuration/ietf_interfaces_cc.xml')
     elif 'routing' == name:

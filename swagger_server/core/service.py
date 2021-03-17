@@ -142,19 +142,19 @@ def query_device_config(neid, xpath, namespaces=None):
 
     # Check for missing device connection information.
     if host is None:
-        msg = "Cannot find host for neid '{}'" % host
+        msg = "Cannot find host for neid '{}'" % neid
         logger.error(msg)
         raise QueryError(msg)
     if port is None:
-        msg = "Cannot find port for neid '{}'" % port
+        msg = "Cannot find port for neid '{}'" % neid
         logger.error(msg)
         raise QueryError(msg)
     if username is None:
-        msg = "Cannot find username for neid '{}'" % username
+        msg = "Cannot find username for neid '{}'" % neid
         logger.error(msg)
         raise QueryError(msg)
     if password is None:
-        msg = "Cannot find password for neid '{}'" % password
+        msg = "Cannot find password for neid '{}'" % neid
         logger.error(msg)
         raise QueryError(msg)
 
