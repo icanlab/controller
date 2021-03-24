@@ -24,7 +24,9 @@ def _ansible_inventory_host(host):
     # Execute Ansible command to fetch host information in the inventory.
     args = ["ansible-inventory", "--host", host]
     try:
-        p = subprocess.run(args, capture_output=True, check=True)
+        p = subprocess.run(
+            args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True
+        )
         inventory = json.loads(p.stdout)
     except subprocess.CalledProcessError as e:
         msg = "Ansible command error: %s" % e.stderr.decode("utf-8", "ignore")
