@@ -16,7 +16,7 @@ _DEFAULT_LOGGER_CONFIG = {
         "default": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "default",
-            "filename": "mediator_ansible_assistant.log",
+            "filename": "mediator-controller.log",
             "maxBytes": 1073741824,  # 1 GiB
             "backupCount": 3,
             "delay": True,
