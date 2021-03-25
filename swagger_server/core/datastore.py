@@ -3,12 +3,12 @@ from ncclient.xml_ import to_ele, to_xml
 from redis import Redis
 
 
-def _ckey(neid, source):
-    return "controller:{}:{}".format(neid, source)
+def _ckey(neid, source, module):
+    return "controller:{}:{}:{}".format(neid, source, module)
 
 
-def _dkey(neid, source):
-    return "device:{}:{}".format(neid, source)
+def _dkey(neid, source, module):
+    return "device:{}:{}:{}".format(neid, source, module)
 
 
 class Datastore(object):
@@ -23,12 +23,12 @@ class Datastore(object):
         xml = self._redis.get(key)
         return to_ele(xml)
 
-    def get_controller_config(self, neid, source):
-        key = _ckey(neid, source)
+    def get_controller_config(self, neid, source, module):
+        key = _ckey(neid, source, module)
         return self._get_config(key)
 
-    def get_device_config(self, neid, source):
-        key = _dkey(neid, source)
+    def get_device_config(self, neid, source, module):
+        key = _dkey(neid, source, module)
         return self._get_config(key)
 
     # ==========
@@ -39,27 +39,10 @@ class Datastore(object):
         xml = to_xml(ele)
         return self._redis.set(key, xml)
 
-    def set_controller_config(self, neid, source, ele):
-        key = _ckey(neid, source)
+    def set_controller_config(self, neid, source, module, ele):
+        key = _ckey(neid, source, module)
         return self._set_config(key, ele)
 
-    def set_device_config(self, neid, source, ele):
-        key = _dkey(neid, source)
+    def set_device_config(self, neid, source, module, ele):
+        key = _dkey(neid, source, module)
         return self._set_config(key, ele)
-
-    # ==========
-    # QUERY
-    # ==========
-
-    def _query_config(self, key, xpath, ns_map):
-        xml = self._redis.get(key)
-        ele = to_ele(xml)
-        return ele.xpath(xpath, namespaces=ns_map)
-
-    def query_controller_config(self, neid, source, xpath, ns_map):
-        key = _ckey(neid, source)
-        return self._query_config(key, xpath, ns_map)
-
-    def query_device_config(self, neid, source, xpath, ns_map):
-        key = _dkey(neid, source)
-        return self._query_config(key, xpath, ns_map)
