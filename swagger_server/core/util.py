@@ -24,3 +24,13 @@ def make_response_xml(element_or_tree, status=200, headers=None):
     return current_app.response_class(
         response, status, headers, mimetype="application/xml"
     )
+
+
+def trim_element(ele, top):
+    parent = ele.getparent()
+    if parent is None:
+        return
+    for e in parent.getchildren():
+        if e is not ele:
+            parent.remove(e)
+    trim_element(parent, top)
