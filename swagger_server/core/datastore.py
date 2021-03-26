@@ -4,6 +4,8 @@ from redis import Redis
 
 
 def trim_element(ele, top):
+    if ele is top:
+        return
     parent = ele.getparent()
     if parent is None:
         return
