@@ -31,6 +31,8 @@ class Datastore(object):
 
     def _get_config(self, key):
         xml = self._redis.get(key)
+        if xml is None:
+            raise ValueError
         return to_ele(xml)
 
     def get_controller_config(self, neid, source, module):
@@ -73,3 +75,16 @@ class Datastore(object):
     def query_device_config(self, neid, source, module, xpath, namespaces):
         config = self.get_device_config(neid, source, module)
         return self._query_config(config, xpath, namespaces)
+
+    # ==========
+    # UPDATE
+    # ==========
+
+    def _update_config(self, config):
+        raise NotImplementedError
+
+    def update_controller_config(self, neid, source, module, config):
+        raise NotImplementedError
+
+    def update_device_config(self, neid, source, module, config):
+        raise NotImplementedError
