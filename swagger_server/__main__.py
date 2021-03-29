@@ -4,7 +4,7 @@ import connexion
 
 from swagger_server import encoder
 from swagger_server.core import init_logger
-from swagger_server.datastore import datastore
+from swagger_server.core.datastore import datastore
 
 
 def main():
