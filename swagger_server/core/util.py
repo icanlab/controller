@@ -27,6 +27,8 @@ def make_response_xml(element_or_tree, status=200, headers=None):
 
 
 def trim_element(ele, top):
+    if ele is top:
+        return
     parent = ele.getparent()
     if parent is None:
         return

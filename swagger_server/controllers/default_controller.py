@@ -11,42 +11,46 @@ from swagger_server.core.service import (
     query_device_config,
     query_device_info,
 )
-from swagger_server.core.util import make_response_json, make_response_xml
+from swagger_server.core.util import make_response_json, make_response_xml, trim_element
 
 swagger_root = os.path.dirname(swagger_server.__file__)
 swagger_test = os.path.join(swagger_root, 'test')
 
 
+def _temp_query(filepath, neid, xpath, ns_map):
+    with open(filepath, 'rb') as f:
+        data = f.read()
+    parser = etree.XMLParser(remove_blank_text=True)
+    root = etree.fromstring(data, parser)
+    assert len(root) <= 1, 'should have at most one module, got {}'.format(len(root))
+    if len(root) == 1:
+        e = root.xpath('/data' + xpath, namespaces=ns_map)[0]
+        trim_element(e, root)
+    return root
+
+
 def temp_query_controller_config(neid, xpath, ns_map):
-    name = xpath[xpath.rfind(':') + 1:]
-    if 'interfaces' == name:
+    if 'interfaces' in xpath:
         filepath = os.path.join(swagger_test, 'controller_current_configuration/ietf_interfaces_cc.xml')
-    elif 'routing' == name:
+    elif 'routing' in xpath:
         filepath = os.path.join(swagger_test, 'controller_current_configuration/ietf_routing_cc.xml')
-    elif 'l3vpn-ntw' == name:
+    elif 'l3vpn-ntw' in xpath:
         filepath = os.path.join(swagger_test, 'controller_current_configuration/ietf_l3vpn_ntw_cc.xml')
     else:
         filepath = os.path.join(swagger_test, 'controller_current_configuration/ietf_interfaces_cc.xml')
-
-    parser = etree.XMLParser(remove_blank_text=True)
-    root = etree.parse(filepath, parser)
-    return root.xpath(xpath, namespaces=ns_map)[0]
+    return _temp_query(filepath, neid, xpath, ns_map)
 
 
 def temp_query_device_config(neid, xpath, ns_map):
-    name = xpath[xpath.rfind(':') + 1:]
-    if 'ifm' == name:
+    if 'ifm' in xpath:
         filepath = os.path.join(swagger_test, 'device_current_configuration/huawei_ifm_cc.xml')
-    elif 'bgp' == name:
+    elif 'bgp' in xpath:
         filepath = os.path.join(swagger_test, 'device_current_configuration/huawei_bgp_cc.xml')
-    elif 'network-instance' == name:
+    elif 'network-instance' in xpath:
         filepath = os.path.join(swagger_test, 'device_current_configuration/huawei_network_instance_cc.xml')
     else:
         filepath = os.path.join(swagger_test, 'device_current_configuration/huawei_ifm_cc.xml')
-
-    parser = etree.XMLParser(remove_blank_text=True)
-    root = etree.parse(filepath, parser)
-    return root.xpath(xpath, namespaces=ns_map)[0]
+    return _temp_query(filepath, neid, xpath, ns_map)
 
 
 def temp_query_device_info(neid):
