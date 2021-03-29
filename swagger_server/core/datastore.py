@@ -24,8 +24,14 @@ def _dkey(neid, source, module):
 
 
 class Datastore(object):
-    def __init__(self, **kwargs):
-        self._redis = Redis(**kwargs)
+    def __init__(self, app=None):
+        self._redis = None
+        if app is not None:
+            self.init_app(app)
+
+    def init_app(self, app):
+        url = app.config.get("MEDIATOR_DATASTORE_URL", "redis://localhost:6379/0")
+        self._redis = Redis.from_url(url)
 
     # ==========
     # GET
@@ -90,3 +96,6 @@ class Datastore(object):
 
     def update_device_config(self, neid, source, module, config):
         raise NotImplementedError
+
+
+datastore = Datastore()
