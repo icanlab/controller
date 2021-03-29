@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bgp xmlns="urn:huawei:yang:huawei-bgp">
-  <global>
-    <yang-enable>True</yang-enable>
-  </global>
-</bgp>
+<data>
+  <bgp xmlns="urn:huawei:yang:huawei-bgp">
+    <global>
+      <yang-enable>True</yang-enable>
+    </global>
+  </bgp>
+</data>

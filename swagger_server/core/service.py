@@ -164,4 +164,4 @@ def query_device_config(neid, xpath, namespaces=None):
         host=host, port=port, username=username, password=password, hostkey_verify=False
     )
     reply = conn.get_config(source="running", filter=("xpath", (namespaces, xpath)))
-    return reply.data_ele[0]
+    return reply.data_ele
