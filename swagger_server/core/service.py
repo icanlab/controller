@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import subprocess
 
 from lxml import etree
@@ -160,8 +161,19 @@ def query_device_config(neid, xpath, namespaces=None):
         logger.error(msg)
         raise QueryError(msg)
 
-    conn = manager.connect(
-        host=host, port=port, username=username, password=password, hostkey_verify=False
-    )
-    reply = conn.get_config(source="running", filter=("xpath", (namespaces, xpath)))
-    return reply.data_ele
+    try:
+        conn = manager.connect(
+            host=host,
+            port=port,
+            username=username,
+            password=password,
+            hostkey_verify=False,
+        )
+        reply = conn.get_config(source="running", filter=("xpath", (namespaces, xpath)))
+    except Exception as e:
+        msg = str(e)
+        logger.error(msg)
+        raise QueryError(msg)
+
+    data = reply.data_xml
+    return re.sub(r"<data .+?>", "<data>", data)
