@@ -108,24 +108,7 @@ def query_controller_config(neid, xpath, namespaces=None):
     """
 
 
-def query_device_config(neid, xpath, namespaces=None):
-    """Query device configuration.
-
-    Parameters
-    ----------
-    neid : str
-        Device name.
-    xpath : str
-        XPath of device configuration.
-    namespaces : dict, optional
-        Namespaces used by XPath.
-
-    Returns
-    -------
-    device_config : lxml.etree._Element
-        Device configuration.
-    """
-
+def _query_from_device(neid, xpath, namespaces=None):
     inventory = _ansible_inventory_host(neid)
 
     # Since Ansible 2.0, variables like ansible_ssh_* have been deprecated.
@@ -177,3 +160,24 @@ def query_device_config(neid, xpath, namespaces=None):
 
     data = reply.data_xml
     return re.sub(r"<data .+?>", "<data>", data)
+
+
+def query_device_config(neid, xpath, namespaces=None):
+    """Query device configuration.
+
+    Parameters
+    ----------
+    neid : str
+        Device name.
+    xpath : str
+        XPath of device configuration.
+    namespaces : dict, optional
+        Namespaces used by XPath.
+
+    Returns
+    -------
+    device_config : lxml.etree._Element
+        Device configuration.
+    """
+
+    _query_from_device(neid, xpath, namespaces)
