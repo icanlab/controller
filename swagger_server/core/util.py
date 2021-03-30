@@ -26,6 +26,16 @@ def make_response_xml(element_or_tree, status=200, headers=None):
     )
 
 
+def query_data(data_ele, xpath, namespaces):
+    n = len(data_ele)
+    if n > 1:
+        raise ValueError("data should have at most one subelement")
+    if n == 1:
+        ele = data_ele.xpath("/data" + xpath, namespaces=namespaces)[0]
+        trim_element(ele, data_ele)
+    return data_ele
+
+
 def trim_element(ele, top):
     if ele is top:
         return
