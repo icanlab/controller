@@ -159,7 +159,7 @@ def _query_from_device(neid, xpath, namespaces=None):
         raise QueryError(msg)
 
     data = reply.data_xml
-    return re.sub(r"<data .+?>", "<data>", data)
+    return re.sub(r"<data .+?(/)?>", r"<data\1>", data)
 
 
 def query_device_config(neid, xpath, namespaces=None):
