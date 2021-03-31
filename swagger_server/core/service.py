@@ -180,4 +180,4 @@ def query_device_config(neid, xpath, namespaces=None):
         Device configuration.
     """
 
-    _query_from_device(neid, xpath, namespaces)
+    return _query_from_device(neid, xpath, namespaces)
