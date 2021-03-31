@@ -2,17 +2,7 @@ from lxml import etree
 from ncclient.xml_ import to_ele, to_xml
 from redis import Redis
 
-
-def trim_element(ele, top):
-    if ele is top:
-        return
-    parent = ele.getparent()
-    if parent is None:
-        return
-    for e in parent.getchildren():
-        if e is not ele:
-            parent.remove(e)
-    trim_element(parent, top)
+from .util import query_data
 
 
 def _ckey(neid, source, module):
@@ -21,6 +11,10 @@ def _ckey(neid, source, module):
 
 def _dkey(neid, source, module):
     return "device:{}:{}:{}".format(neid, source, module)
+
+
+class EmptyConfig(Exception):
+    pass
 
 
 class Datastore(object):
@@ -40,7 +34,7 @@ class Datastore(object):
     def _get_config(self, key):
         xml = self._redis.get(key)
         if xml is None:
-            raise ValueError
+            raise EmptyConfig(key)
         return to_ele(xml)
 
     def get_controller_config(self, neid, source, module):
@@ -71,18 +65,13 @@ class Datastore(object):
     # QUERY
     # ==========
 
-    def _query_config(self, config, xpath, namespaces):
-        target = config.xpath(xpath, namespaces=namespaces)
-        trim_element(target, config)
-        return config
-
     def query_controller_config(self, neid, source, module, xpath, namespaces):
         config = self.get_controller_config(neid, source, module)
-        return self._query_config(config, xpath, namespaces)
+        return query_data(config, xpath, namespaces)
 
     def query_device_config(self, neid, source, module, xpath, namespaces):
         config = self.get_device_config(neid, source, module)
-        return self._query_config(config, xpath, namespaces)
+        return query_data(config, xpath, namespaces)
 
     # ==========
     # UPDATE
