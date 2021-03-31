@@ -47,6 +47,6 @@ def load_app_config(app):
             raise RuntimeError("error config file, require dict")
     except Exception as e:
         logger.error('fail to load configuration "{}"'.format(e))
-
-    for k, v in data.items():
-        app.config[k] = v
+    else:
+        for k, v in data.items():
+            app.config[k] = v
