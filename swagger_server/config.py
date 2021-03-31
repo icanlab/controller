@@ -41,7 +41,8 @@ def init_logger():
 def load_app_config(app):
     config_path = os.path.expanduser("~/.mediator/controller.yml")
     try:
-        data = yaml.safe_load(config_path)
+        with open(config_path, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
         if not isinstance(data, dict):
             raise RuntimeError("error config file, require dict")
     except Exception as e:
