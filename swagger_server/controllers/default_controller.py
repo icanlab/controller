@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 import connexion
@@ -15,6 +16,8 @@ from swagger_server.core.util import make_response_json, make_response_xml, trim
 
 swagger_root = os.path.dirname(swagger_server.__file__)
 swagger_test = os.path.join(swagger_root, 'test')
+
+logger = logging.getLogger(__name__)
 
 
 def _temp_query(filepath, neid, xpath, ns_map):

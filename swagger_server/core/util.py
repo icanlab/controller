@@ -1,7 +1,10 @@
 import json
+import logging
 
 from flask import current_app
 from lxml import etree
+
+logger = logging.getLogger(__name__)
 
 
 def make_response_json(obj, status=200, headers=None):
@@ -21,6 +24,7 @@ def make_response_xml(element_or_tree, status=200, headers=None):
         )
     else:
         response = element_or_tree
+    logger.info(response)
     return current_app.response_class(
         response, status, headers, mimetype="application/xml"
     )

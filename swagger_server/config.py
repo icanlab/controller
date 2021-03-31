@@ -26,7 +26,7 @@ _DEFAULT_LOGGER_CONFIG = {
     },
     "loggers": {
         __name__: {
-            "level": "ERROR",
+            "level": "INFO",
             "propagate": False,
             "handlers": ["default"],
         }
