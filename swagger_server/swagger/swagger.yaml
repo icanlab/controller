@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   title: Mediator controller
-  description: This is a sample Mediator controller.  You can find out more about
-    our project at [https://github.com/icanlab/mediator-controller)
+  description: "This is a sample Mediator controller.  You can find out more about\
+    \ our project at [https://github.com/icanlab/mediator-controller)"
   contact:
     email: icanlab@pub.seu.edu.cn
   license:
@@ -125,8 +125,318 @@ paths:
                 type: string
                 x-content-type: application/json
       x-openapi-router-controller: swagger_server.controllers.default_controller
+  /datastore/get_controller_config:
+    get:
+      summary: get controller configuration
+      operationId: datastore_get_controller_config_get
+      parameters:
+      - name: neid
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: source
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: get success
+          content:
+            application/xml:
+              schema:
+                type: string
+                x-content-type: application/xml
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/get_device_config:
+    get:
+      summary: get device configuration
+      operationId: datastore_get_device_config_get
+      parameters:
+      - name: neid
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: source
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: get success
+          content:
+            application/xml:
+              schema:
+                type: string
+                x-content-type: application/xml
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/query_controller_config:
+    get:
+      summary: query controller configuration
+      operationId: datastore_query_controller_config_get
+      parameters:
+      - name: neid
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: source
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: xpath
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: ns_map
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: get success
+          content:
+            application/xml:
+              schema:
+                type: string
+                x-content-type: application/xml
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/query_device_config:
+    get:
+      summary: query device configuration
+      operationId: datastore_query_device_config_get
+      parameters:
+      - name: neid
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: source
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: xpath
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: ns_map
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: get success
+          content:
+            application/xml:
+              schema:
+                type: string
+                x-content-type: application/xml
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/set_controller_config:
+    post:
+      summary: set controller configuration
+      operationId: datastore_set_controller_config_post
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_msg'
+      responses:
+        "200":
+          description: get success
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/set_device_config:
+    post:
+      summary: set device configuration
+      operationId: datastore_set_device_config_post
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_msg'
+      responses:
+        "200":
+          description: get success
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/update_controller_config:
+    post:
+      summary: update controller configuration
+      operationId: datastore_update_controller_config_post
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_msg'
+      responses:
+        "200":
+          description: get success
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+  /datastore/update_device_config:
+    post:
+      summary: update device configuration
+      operationId: datastore_update_device_config_post
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/input_msg'
+      responses:
+        "200":
+          description: get success
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: operation failed!
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.datastore_controller
 components:
-  schemas: {}
+  schemas:
+    input_msg:
+      properties:
+        neid:
+          type: string
+        source:
+          type: string
+        module:
+          type: string
+        data:
+          type: string
   securitySchemes: {}
   links: {}
   callbacks: {}
