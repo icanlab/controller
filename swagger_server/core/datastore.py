@@ -13,10 +13,6 @@ def _dkey(neid, source, module):
     return "device:{}:{}:{}".format(neid, source, module)
 
 
-class EmptyConfig(Exception):
-    pass
-
-
 class Datastore(object):
     def __init__(self, app=None):
         self._redis = None
@@ -34,7 +30,7 @@ class Datastore(object):
     def _get_config(self, key):
         xml = self._redis.get(key)
         if xml is None:
-            raise EmptyConfig(key)
+            return etree.Element("data")
         return to_ele(xml)
 
     def get_controller_config(self, neid, source, module):
