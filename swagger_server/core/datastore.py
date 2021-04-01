@@ -23,9 +23,9 @@ class Datastore(object):
         url = app.config.get("MEDIATOR_DATASTORE_URL", "redis://localhost:6379/0")
         self._redis = Redis.from_url(url)
 
-    # ==========
-    # GET
-    # ==========
+    # ===== #
+    #  GET  #
+    # ===== #
 
     def _get_config(self, key):
         xml = self._redis.get(key)
@@ -41,9 +41,9 @@ class Datastore(object):
         key = _dkey(neid, source, module)
         return self._get_config(key)
 
-    # ==========
-    # SET
-    # ==========
+    # ===== #
+    #  SET  #
+    # ===== #
 
     def _set_config(self, key, ele):
         xml = to_xml(ele)
@@ -57,9 +57,9 @@ class Datastore(object):
         key = _dkey(neid, source, module)
         return self._set_config(key, ele)
 
-    # ==========
-    # QUERY
-    # ==========
+    # ======= #
+    #  QUERY  #
+    # ======= #
 
     def query_controller_config(self, neid, source, module, xpath, namespaces):
         config = self.get_controller_config(neid, source, module)
@@ -69,9 +69,9 @@ class Datastore(object):
         config = self.get_device_config(neid, source, module)
         return query_data(config, xpath, namespaces)
 
-    # ==========
-    # UPDATE
-    # ==========
+    # ======== #
+    #  UPDATE  #
+    # ======== #
 
     def _update_config(self, config):
         raise NotImplementedError
