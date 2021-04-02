@@ -1,4 +1,8 @@
+import connexion
+
 from swagger_server.core.datastore import datastore
+from swagger_server.core.util import make_response_json, make_response_xml
+from swagger_server.models.input_msg import InputMsg
 
 
 def datastore_get_controller_config_get(neid, source, module):  # noqa: E501
@@ -15,7 +19,12 @@ def datastore_get_controller_config_get(neid, source, module):  # noqa: E501
 
     :rtype: str
     """
-    return 'do some magic!'
+    try:
+        ele = datastore.get_controller_config(neid, source, module)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
+    return make_response_xml(ele)
 
 
 def datastore_get_device_config_get(neid, source, module):  # noqa: E501
@@ -32,7 +41,12 @@ def datastore_get_device_config_get(neid, source, module):  # noqa: E501
 
     :rtype: str
     """
-    return 'do some magic!'
+    try:
+        ele = datastore.get_device_config(neid, source, module)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
+    return make_response_xml(ele)
 
 
 def datastore_query_controller_config_get(neid, source, module, xpath, ns_map):  # noqa: E501
@@ -53,7 +67,13 @@ def datastore_query_controller_config_get(neid, source, module, xpath, ns_map): 
 
     :rtype: str
     """
-    return 'do some magic!'
+    try:
+        ns_map = json.loads(ns_map)
+        ele = datastore.query_controller_config(neid, source, module, xpath, ns_map)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
+    return make_response_xml(ele)
 
 
 def datastore_query_device_config_get(neid, source, module, xpath, ns_map):  # noqa: E501
@@ -74,7 +94,13 @@ def datastore_query_device_config_get(neid, source, module, xpath, ns_map):  # n
 
     :rtype: str
     """
-    return 'do some magic!'
+    try:
+        ns_map = json.loads(ns_map)
+        ele = datastore.query_device_config(neid, source, module, xpath, ns_map)
+    except Exception as e:
+        res = {'errinfo': str(e)}
+        return make_response_json(res, 400)
+    return make_response_xml(ele)
 
 
 def datastore_set_controller_config_post(body=None):  # noqa: E501
@@ -89,6 +115,16 @@ def datastore_set_controller_config_post(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
+        neid = body.neid
+        source = body.source
+        module = body.module
+        data = body.data
+        try:
+            datastore.set_controller_config(neid, source, module, data)
+        except Exception as e:
+            res = {'errinfo': str(e)}
+            return make_response_json(res, 400)
+        return make_response_json({'ok': 200})
     return 'do some magic!'
 
 
@@ -104,6 +140,16 @@ def datastore_set_device_config_post(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
+        neid = body.neid
+        source = body.source
+        module = body.module
+        data = body.data
+        try:
+            datastore.set_device_config(neid, source, module, data)
+        except Exception as e:
+            res = {'errinfo': str(e)}
+            return make_response_json(res, 400)
+        return make_response_json({'ok': 200})
     return 'do some magic!'
 
 
