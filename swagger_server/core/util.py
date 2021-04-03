@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 from flask import current_app
 from lxml import etree
@@ -54,3 +55,10 @@ def trim_element(ele, top):
         if e is not ele:
             parent.remove(e)
     trim_element(parent, top)
+
+
+def extract_module_from_xpath(xpath):
+    m = re.match(r"/(?:[^/]+?:)?([^/]+)")
+    if m is None or len(m.groups()) < 1:
+        raise QueryError("error xpath: '{}'".format(xpath))
+    return m[1]

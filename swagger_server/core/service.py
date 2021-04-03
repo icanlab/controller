@@ -7,6 +7,7 @@ from lxml import etree
 from ncclient import manager
 
 from .datastore import datastore
+from .util import extract_module_from_xpath
 
 logger = logging.getLogger(__name__)
 
@@ -109,10 +110,7 @@ def query_controller_config(neid, xpath, namespaces=None):
         Controller configuration.
     """
 
-    m = re.match(r"/(?:[^/]+?:)?([^/]+)")
-    if m is None:
-        raise QueryError("error xpath: '{}'".format(xpath))
-    module = m[1]
+    module = extract_module_from_xpath(xpath)
     return datastore.query_controller_config(neid, "running", module, namespaces)
 
 
@@ -188,4 +186,6 @@ def query_device_config(neid, xpath, namespaces=None):
         Device configuration.
     """
 
-    return _query_from_device(neid, xpath, namespaces)
+    module = extract_module_from_xpath(xpath)
+    return datastore.query_device_config(neid, "running", module, namespaces)
+    # return _query_from_device(neid, xpath, namespaces)
