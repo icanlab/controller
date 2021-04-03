@@ -6,6 +6,8 @@ import subprocess
 from lxml import etree
 from ncclient import manager
 
+from .datastore import datastore
+
 logger = logging.getLogger(__name__)
 
 
@@ -106,6 +108,12 @@ def query_controller_config(neid, xpath, namespaces=None):
     controller_config : lxml.etree._Element
         Controller configuration.
     """
+
+    m = re.match(r"/(?:[^/]+?:)?([^/]+)")
+    if m is None:
+        raise QueryError("error xpath: '{}'".format(xpath))
+    module = m[1]
+    return datastore.query_controller_config(neid, "running", module, namespaces)
 
 
 def _query_from_device(neid, xpath, namespaces=None):
