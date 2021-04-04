@@ -165,6 +165,16 @@ def datastore_update_controller_config_post(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
+        neid = body.neid
+        source = body.source
+        module = body.module
+        data = body.data
+        try:
+            datastore.update_controller_config(neid, source, module, data)
+        except Exception as e:
+            res = {'errinfo': str(e)}
+            return make_response_json(res, 400)
+        return make_response_json({'ok': 200})
     return 'do some magic!'
 
 
@@ -180,4 +190,14 @@ def datastore_update_device_config_post(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
+        neid = body.neid
+        source = body.source
+        module = body.module
+        data = body.data
+        try:
+            datastore.update_device_config(neid, source, module, data)
+        except Exception as e:
+            res = {'errinfo': str(e)}
+            return make_response_json(res, 400)
+        return make_response_json({'ok': 200})
     return 'do some magic!'

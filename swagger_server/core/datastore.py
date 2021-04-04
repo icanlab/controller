@@ -45,17 +45,17 @@ class Datastore(object):
     #  SET  #
     # ===== #
 
-    def _set_config(self, key, ele):
-        xml = to_xml(ele)
+    def _set_config(self, key, ele_or_xml):
+        xml = to_xml(ele_or_xml)
         return self._redis.set(key, xml)
 
-    def set_controller_config(self, neid, source, module, ele):
+    def set_controller_config(self, neid, source, module, ele_or_xml):
         key = _ckey(neid, source, module)
-        return self._set_config(key, ele)
+        return self._set_config(key, ele_or_xml)
 
-    def set_device_config(self, neid, source, module, ele):
+    def set_device_config(self, neid, source, module, ele_or_xml):
         key = _dkey(neid, source, module)
-        return self._set_config(key, ele)
+        return self._set_config(key, ele_or_xml)
 
     # ======= #
     #  QUERY  #
