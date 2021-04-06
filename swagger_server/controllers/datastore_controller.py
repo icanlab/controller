@@ -1,5 +1,7 @@
 import connexion
 
+from ncclient.xml_ import to_ele
+
 from swagger_server.core.datastore import datastore
 from swagger_server.core.util import make_response_json, make_response_xml
 from swagger_server.models.input_msg import InputMsg
@@ -114,13 +116,13 @@ def datastore_set_controller_config_post(body=None):  # noqa: E501
     :rtype: str
     """
     if connexion.request.is_json:
-        body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
-        neid = body.neid
-        source = body.source
-        module = body.module
-        data = body.data
         try:
-            datastore.set_controller_config(neid, source, module, data)
+            body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
+            neid = body.neid
+            source = body.source
+            module = body.module
+            ele = to_ele(body.data)
+            datastore.set_controller_config(neid, source, module, ele)
         except Exception as e:
             res = {'errinfo': str(e)}
             return make_response_json(res, 400)
@@ -139,13 +141,13 @@ def datastore_set_device_config_post(body=None):  # noqa: E501
     :rtype: str
     """
     if connexion.request.is_json:
-        body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
-        neid = body.neid
-        source = body.source
-        module = body.module
-        data = body.data
         try:
-            datastore.set_device_config(neid, source, module, data)
+            body = InputMsg.from_dict(connexion.request.get_json())  # noqa: E501
+            neid = body.neid
+            source = body.source
+            module = body.module
+            ele = to_ele(body.data)
+            datastore.set_device_config(neid, source, module, ele)
         except Exception as e:
             res = {'errinfo': str(e)}
             return make_response_json(res, 400)
