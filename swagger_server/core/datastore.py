@@ -46,7 +46,10 @@ class Datastore(object):
     # ===== #
 
     def _set_config(self, key, ele_or_xml):
-        xml = to_xml(ele_or_xml)
+        if etree.iselement(ele_or_xml):
+            xml = to_xml(ele_or_xml)
+        else:
+            xml = ele_or_xml
         return self._redis.set(key, xml)
 
     def set_controller_config(self, neid, source, module, ele_or_xml):
