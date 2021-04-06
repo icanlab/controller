@@ -105,8 +105,8 @@ def get_device_config(neid, xpath, ns_map):  # noqa: E501
     """
     try:
         ns_map = json.loads(ns_map)
-        # device_config = temp_query_device_config(neid, xpath, ns_map)
-        device_config = query_device_config(neid, xpath, ns_map)
+        device_config = temp_query_device_config(neid, xpath, ns_map)
+        # device_config = query_device_config(neid, xpath, ns_map)
     except Exception as e:
         res = {'errinfo': str(e)}
         return make_response_json(res, 400)
