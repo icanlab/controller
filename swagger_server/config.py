@@ -43,10 +43,10 @@ def load_app_config(app):
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
+    except Exception as e:
+        logger.info('fail to load configuration "{}", use default configuration'.format(e))
+    else:
         if not isinstance(data, dict):
             raise RuntimeError("error config file, require dict")
-    except Exception as e:
-        logger.error('fail to load configuration "{}"'.format(e))
-    else:
         for k, v in data.items():
             app.config[k] = v
