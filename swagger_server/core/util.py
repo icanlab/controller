@@ -6,6 +6,7 @@ from flask import current_app
 from lxml import etree
 
 logger = logging.getLogger(__name__)
+_PARSER = etree.XMLParser(remove_blank_text=True)
 
 
 def make_response_json(obj, status=200, headers=None):
@@ -69,3 +70,19 @@ def extract_module_from_xpath(xpath):
     if m is None or len(m.groups()) < 1:
         raise QueryError("error xpath: '{}'".format(xpath))
     return m[1]
+
+
+def to_ele(xml):
+    if etree.iselement(xml):
+        return xml
+    if isinstance(xml, str):
+        xml = xml.encode()
+    ele = etree.fromstring(xml, parser=_PARSER)
+    return ele
+
+
+def to_xml(ele):
+    if not etree.iselement(ele):
+        return ele
+    xml = etree.tostring(ele, encoding="utf-8", xml_declaration=True)
+    return xml

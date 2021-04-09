@@ -1,8 +1,7 @@
 from lxml import etree
-from ncclient.xml_ import to_ele, to_xml
 from redis import Redis
 
-from .util import query_data
+from .util import query_data, to_ele, to_xml
 
 
 def _resolve_module(ele):

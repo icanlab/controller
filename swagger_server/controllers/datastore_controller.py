@@ -1,9 +1,7 @@
 import connexion
 
-from ncclient.xml_ import to_ele
-
 from swagger_server.core.datastore import datastore
-from swagger_server.core.util import make_response_json, make_response_xml
+from swagger_server.core.util import make_response_json, make_response_xml, to_ele
 from swagger_server.models.input_msg import InputMsg
 
 
