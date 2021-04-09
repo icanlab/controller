@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 import re
@@ -37,7 +38,7 @@ def _real_query_data(data_ele, xpath, namespaces):
     # 查不到时返回空配置。
     if len(result) == 0:
         return etree.Element("data")
-    ele = result[0]
+    ele = copy.copy(result[0])
     data = etree.Element("data")
     data.append(ele)
     return data
