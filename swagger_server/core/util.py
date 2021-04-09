@@ -31,18 +31,25 @@ def make_response_xml(element_or_tree, status=200, headers=None):
     )
 
 
+def _real_query_data(data_ele, xpath, namespaces):
+    result = data_ele.xpath("/data" + xpath, namespaces=namespaces)
+    # 查不到时返回空配置。
+    if len(result) == 0:
+        return etree.Element("data")
+    ele = result[0]
+    data = etree.Element("data")
+    data.append(ele)
+    return data
+
+
 def query_data(data_ele, xpath, namespaces):
     n = len(data_ele)
     if n > 1:
         raise ValueError("data should have at most one subelement")
     if n == 1:
-        result = data_ele.xpath("/data" + xpath, namespaces=namespaces)
-        # 查不到时返回空配置。
-        if len(result) == 0:
-            return etree.Element("data")
-        ele = result[0]
-        trim_element(ele, data_ele)
-    return data_ele
+        return _real_query_data(data_ele, xpath, namespaces)
+    if n == 0:
+        return data_ele  # empty config
 
 
 def trim_element(ele, top):
