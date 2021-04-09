@@ -65,7 +65,7 @@ def trim_element(ele, top):
 
 
 def extract_module_from_xpath(xpath):
-    m = re.match(r"/(?:[^/]+?:)?([^/]+)")
+    m = re.match(r"/(?:[^/]+?:)?([^/]+)", xpath)
     if m is None or len(m.groups()) < 1:
         raise QueryError("error xpath: '{}'".format(xpath))
     return m[1]
