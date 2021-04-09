@@ -12,7 +12,7 @@ from swagger_server.core.service import (
     query_device_config,
     query_device_info,
 )
-from swagger_server.core.util import make_response_json, make_response_xml, trim_element
+from swagger_server.core.util import make_response_json, make_response_xml, query_data
 
 swagger_root = os.path.dirname(swagger_server.__file__)
 swagger_test = os.path.join(swagger_root, 'test')
@@ -25,11 +25,7 @@ def _temp_query(filepath, neid, xpath, ns_map):
         data = f.read()
     parser = etree.XMLParser(remove_blank_text=True)
     root = etree.fromstring(data, parser)
-    assert len(root) <= 1, 'should have at most one module, got {}'.format(len(root))
-    if len(root) == 1:
-        e = root.xpath('/data' + xpath, namespaces=ns_map)[0]
-        trim_element(e, root)
-    return root
+    return query_data(root, xpath, ns_map)
 
 
 def temp_query_controller_config(neid, xpath, ns_map):
