@@ -3,7 +3,6 @@ import logging
 import re
 import subprocess
 
-from lxml import etree
 from ncclient import manager
 
 from .datastore import datastore
@@ -111,7 +110,7 @@ def query_controller_config(neid, xpath, namespaces=None):
     """
 
     module = extract_module_from_xpath(xpath)
-    return datastore.query_controller_config(neid, "running", module, xpath, namespaces) 
+    return datastore.query_controller_config(neid, "running", module, xpath, namespaces)
 
 
 def _query_from_device(neid, xpath, namespaces=None):

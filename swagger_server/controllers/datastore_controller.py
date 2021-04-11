@@ -12,11 +12,11 @@ def datastore_get_controller_config_get(neid, source, module):  # noqa: E501
 
      # noqa: E501
 
-    :param neid: 
+    :param neid:
     :type neid: str
-    :param source: 
+    :param source:
     :type source: str
-    :param module: 
+    :param module:
     :type module: str
 
     :rtype: str
@@ -24,7 +24,7 @@ def datastore_get_controller_config_get(neid, source, module):  # noqa: E501
     try:
         ele = datastore.get_controller_config(neid, source, module)
     except Exception as e:
-        res = {'errinfo': str(e)}
+        res = {"errinfo": str(e)}
         return make_response_json(res, 400)
     return make_response_xml(ele)
 
@@ -34,11 +34,11 @@ def datastore_get_device_config_get(neid, source, module):  # noqa: E501
 
      # noqa: E501
 
-    :param neid: 
+    :param neid:
     :type neid: str
-    :param source: 
+    :param source:
     :type source: str
-    :param module: 
+    :param module:
     :type module: str
 
     :rtype: str
@@ -46,25 +46,27 @@ def datastore_get_device_config_get(neid, source, module):  # noqa: E501
     try:
         ele = datastore.get_device_config(neid, source, module)
     except Exception as e:
-        res = {'errinfo': str(e)}
+        res = {"errinfo": str(e)}
         return make_response_json(res, 400)
     return make_response_xml(ele)
 
 
-def datastore_query_controller_config_get(neid, source, module, xpath, ns_map):  # noqa: E501
+def datastore_query_controller_config_get(
+    neid, source, module, xpath, ns_map
+):  # noqa: E501
     """query controller configuration
 
      # noqa: E501
 
-    :param neid: 
+    :param neid:
     :type neid: str
-    :param source: 
+    :param source:
     :type source: str
-    :param module: 
+    :param module:
     :type module: str
-    :param xpath: 
+    :param xpath:
     :type xpath: str
-    :param ns_map: 
+    :param ns_map:
     :type ns_map: str
 
     :rtype: str
@@ -73,25 +75,27 @@ def datastore_query_controller_config_get(neid, source, module, xpath, ns_map): 
         ns_map = json.loads(ns_map)
         ele = datastore.query_controller_config(neid, source, module, xpath, ns_map)
     except Exception as e:
-        res = {'errinfo': str(e)}
+        res = {"errinfo": str(e)}
         return make_response_json(res, 400)
     return make_response_xml(ele)
 
 
-def datastore_query_device_config_get(neid, source, module, xpath, ns_map):  # noqa: E501
+def datastore_query_device_config_get(
+    neid, source, module, xpath, ns_map
+):  # noqa: E501
     """query device configuration
 
      # noqa: E501
 
-    :param neid: 
+    :param neid:
     :type neid: str
-    :param source: 
+    :param source:
     :type source: str
-    :param module: 
+    :param module:
     :type module: str
-    :param xpath: 
+    :param xpath:
     :type xpath: str
-    :param ns_map: 
+    :param ns_map:
     :type ns_map: str
 
     :rtype: str
@@ -100,7 +104,7 @@ def datastore_query_device_config_get(neid, source, module, xpath, ns_map):  # n
         ns_map = json.loads(ns_map)
         ele = datastore.query_device_config(neid, source, module, xpath, ns_map)
     except Exception as e:
-        res = {'errinfo': str(e)}
+        res = {"errinfo": str(e)}
         return make_response_json(res, 400)
     return make_response_xml(ele)
 
@@ -110,7 +114,7 @@ def datastore_set_controller_config_post(body=None):  # noqa: E501
 
      # noqa: E501
 
-    :param body: 
+    :param body:
     :type body: dict | bytes
 
     :rtype: str
@@ -124,10 +128,10 @@ def datastore_set_controller_config_post(body=None):  # noqa: E501
             ele = to_ele(body.data)
             datastore.set_controller_config(neid, source, module, ele)
         except Exception as e:
-            res = {'errinfo': str(e)}
+            res = {"errinfo": str(e)}
             return make_response_json(res, 400)
-        return make_response_json({'ok': 200})
-    return 'do some magic!'
+        return make_response_json({"ok": 200})
+    return "do some magic!"
 
 
 def datastore_set_device_config_post(body=None):  # noqa: E501
@@ -135,7 +139,7 @@ def datastore_set_device_config_post(body=None):  # noqa: E501
 
      # noqa: E501
 
-    :param body: 
+    :param body:
     :type body: dict | bytes
 
     :rtype: str
@@ -149,10 +153,10 @@ def datastore_set_device_config_post(body=None):  # noqa: E501
             ele = to_ele(body.data)
             datastore.set_device_config(neid, source, module, ele)
         except Exception as e:
-            res = {'errinfo': str(e)}
+            res = {"errinfo": str(e)}
             return make_response_json(res, 400)
-        return make_response_json({'ok': 200})
-    return 'do some magic!'
+        return make_response_json({"ok": 200})
+    return "do some magic!"
 
 
 def datastore_update_controller_config_post(body=None):  # noqa: E501
@@ -160,7 +164,7 @@ def datastore_update_controller_config_post(body=None):  # noqa: E501
 
      # noqa: E501
 
-    :param body: 
+    :param body:
     :type body: dict | bytes
 
     :rtype: str
@@ -174,10 +178,10 @@ def datastore_update_controller_config_post(body=None):  # noqa: E501
         try:
             datastore.update_controller_config(neid, source, module, data)
         except Exception as e:
-            res = {'errinfo': str(e)}
+            res = {"errinfo": str(e)}
             return make_response_json(res, 400)
-        return make_response_json({'ok': 200})
-    return 'do some magic!'
+        return make_response_json({"ok": 200})
+    return "do some magic!"
 
 
 def datastore_update_device_config_post(body=None):  # noqa: E501
@@ -185,7 +189,7 @@ def datastore_update_device_config_post(body=None):  # noqa: E501
 
      # noqa: E501
 
-    :param body: 
+    :param body:
     :type body: dict | bytes
 
     :rtype: str
@@ -199,7 +203,7 @@ def datastore_update_device_config_post(body=None):  # noqa: E501
         try:
             datastore.update_device_config(neid, source, module, data)
         except Exception as e:
-            res = {'errinfo': str(e)}
+            res = {"errinfo": str(e)}
             return make_response_json(res, 400)
-        return make_response_json({'ok': 200})
-    return 'do some magic!'
+        return make_response_json({"ok": 200})
+    return "do some magic!"

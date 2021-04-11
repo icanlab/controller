@@ -41,10 +41,12 @@ def init_logger():
 def load_app_config(app):
     config_path = os.path.expanduser("~/.mediator/controller.yml")
     try:
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
     except Exception as e:
-        logger.info('fail to load configuration "{}", use default configuration'.format(e))
+        logger.info(
+            'fail to load configuration "{}", use default configuration'.format(e)
+        )
     else:
         if not isinstance(data, dict):
             raise RuntimeError("error config file, require dict")

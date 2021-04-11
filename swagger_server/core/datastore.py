@@ -31,7 +31,7 @@ class Datastore(object):
     # ===== #
 
     def _get_config(self, key):
-        xml = self._redis.get(key)
+        xml = self._redis.get(key)  # type: ignore [union-attr]
         if xml is None:
             return etree.Element("data")
         return to_ele(xml)
@@ -50,7 +50,7 @@ class Datastore(object):
 
     def _set_config(self, key, ele):
         xml = to_xml(ele)
-        return self._redis.set(key, xml)
+        return self._redis.set(key, xml)  # type: ignore [union-attr]
 
     def set_controller_config(self, neid, source, module, ele):
         # NE 插件难以获取 module，因此 module 为空串时，datastore 从报文中推断 module。

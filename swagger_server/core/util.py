@@ -14,7 +14,7 @@ def make_response_json(obj, status=200, headers=None):
     if not isinstance(obj, (str, bytes, bytearray)):
         response = json.dumps(obj)
     else:
-        response = obj
+        response = obj  # type: ignore [assignment]
     return current_app.response_class(
         response, status, headers, mimetype="application/json"
     )

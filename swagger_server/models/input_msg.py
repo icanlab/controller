@@ -1,12 +1,12 @@
 # coding: utf-8
 
 from __future__ import absolute_import
+
 from datetime import date, datetime  # noqa: F401
+from typing import Dict, List  # noqa: F401
 
-from typing import List, Dict  # noqa: F401
-
-from swagger_server.models.base_model_ import Model
 from swagger_server import util
+from swagger_server.models.base_model_ import Model
 
 
 class InputMsg(Model):
@@ -14,7 +14,10 @@ class InputMsg(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, neid: str=None, source: str=None, module: str=None, data: str=None):  # noqa: E501
+
+    def __init__(
+        self, neid: str = None, source: str = None, module: str = None, data: str = None
+    ):  # noqa: E501
         """InputMsg - a model defined in Swagger
 
         :param neid: The neid of this InputMsg.  # noqa: E501
@@ -26,18 +29,13 @@ class InputMsg(Model):
         :param data: The data of this InputMsg.  # noqa: E501
         :type data: str
         """
-        self.swagger_types = {
-            'neid': str,
-            'source': str,
-            'module': str,
-            'data': str
-        }
+        self.swagger_types = {"neid": str, "source": str, "module": str, "data": str}
 
         self.attribute_map = {
-            'neid': 'neid',
-            'source': 'source',
-            'module': 'module',
-            'data': 'data'
+            "neid": "neid",
+            "source": "source",
+            "module": "module",
+            "data": "data",
         }
         self._neid = neid
         self._source = source
@@ -45,7 +43,7 @@ class InputMsg(Model):
         self._data = data
 
     @classmethod
-    def from_dict(cls, dikt) -> 'InputMsg':
+    def from_dict(cls, dikt) -> "InputMsg":
         """Returns the dict as a model
 
         :param dikt: A dict.
