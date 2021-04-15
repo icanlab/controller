@@ -6,7 +6,7 @@ import subprocess
 from ncclient import manager
 
 from .datastore import datastore
-from .util import extract_module_from_xpath
+from .util import extract_module_from_xpath, to_xml
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +110,9 @@ def query_controller_config(neid, xpath, namespaces=None):
     """
 
     module = extract_module_from_xpath(xpath)
-    return datastore.query_controller_config(neid, "running", module, xpath, namespaces)
+    config = datastore.query_controller_config(neid, "running", module, xpath, namespaces)
+    print(to_xml(config))
+    return config
 
 
 def _query_from_device(neid, xpath, namespaces=None):
@@ -186,5 +188,7 @@ def query_device_config(neid, xpath, namespaces=None):
     """
 
     module = extract_module_from_xpath(xpath)
-    return datastore.query_device_config(neid, "running", module, xpath, namespaces)
+    config = datastore.query_device_config(neid, "running", module, xpath, namespaces)
+    print(to_xml(config))
+    return config
     # return _query_from_device(neid, xpath, namespaces)
