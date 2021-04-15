@@ -110,8 +110,10 @@ def query_controller_config(neid, xpath, namespaces=None):
     """
 
     module = extract_module_from_xpath(xpath)
-    config = datastore.query_controller_config(neid, "running", module, xpath, namespaces)
-    print(to_xml(config))
+    config = datastore.query_controller_config(
+        neid, "running", module, xpath, namespaces
+    )
+    # print(to_xml(config))
     return config
 
 
@@ -189,6 +191,5 @@ def query_device_config(neid, xpath, namespaces=None):
 
     module = extract_module_from_xpath(xpath)
     config = datastore.query_device_config(neid, "running", module, xpath, namespaces)
-    print(to_xml(config))
+    # print(to_xml(config))
     return config
-    # return _query_from_device(neid, xpath, namespaces)

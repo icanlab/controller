@@ -27,7 +27,7 @@ def make_response_xml(element_or_tree, status=200, headers=None):
         )
     else:
         response = element_or_tree
-    logger.info(response)
+    logger.info(response if isinstance(response, str) else response.decode())
     return current_app.response_class(
         response, status, headers, mimetype="application/xml"
     )

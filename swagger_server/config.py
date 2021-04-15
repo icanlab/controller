@@ -4,7 +4,7 @@ import os
 
 import yaml
 
-logger = logging.getLogger('swagger_server')
+logger = logging.getLogger("swagger_server")
 logger.addHandler(logging.NullHandler())
 
 _DEFAULT_LOGGER_CONFIG = {
@@ -25,7 +25,7 @@ _DEFAULT_LOGGER_CONFIG = {
         }
     },
     "loggers": {
-        'swagger_server': {
+        "swagger_server": {
             "level": "INFO",
             "propagate": False,
             "handlers": ["default"],
