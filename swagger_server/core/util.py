@@ -82,8 +82,10 @@ def to_ele(xml):
     return ele
 
 
-def to_xml(ele):
+def to_xml(ele, pretty_print=False):
     if not etree.iselement(ele):
         return ele
-    xml = etree.tostring(ele, encoding="utf-8", xml_declaration=True)
+    xml = etree.tostring(
+        ele, encoding="utf-8", xml_declaration=True, pretty_print=pretty_print
+    )
     return xml

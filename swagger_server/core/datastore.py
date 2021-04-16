@@ -49,7 +49,7 @@ class Datastore(object):
     # ===== #
 
     def _set_config(self, key, ele):
-        xml = to_xml(ele)
+        xml = to_xml(ele, pretty_print=True)
         return self._redis.set(key, xml)  # type: ignore [union-attr]
 
     def set_controller_config(self, neid, source, module, ele):
