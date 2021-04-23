@@ -8,7 +8,7 @@
 - HUAWEI NE Router
 - Redis
 
-## Ansible configuration
+## Configure Ansible
 
 Edit `/etc/ansible/hosts`, and add device information:
 
@@ -16,7 +16,7 @@ Edit `/etc/ansible/hosts`, and add device information:
 netopeer2 ansible_ssh_host=127.0.0.1  ansible_ssh_port=830  ansible_user=*** ansible_ssh_pass=*** ansible_network_os=ne mediator_device_vendor=HUAWEI mediator_device_type=ROUTER6500 mediator_device_product=HUAWEIOS mediator_device_version=1.0.1111.2
 ```
 
-## Redis configuration
+## Configure Redis
 
 Start redis-server.
 
