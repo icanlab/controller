@@ -40,3 +40,67 @@ git clone https://github.com/icanlab/mediator-controller.git
 cd mediator-controller
 pip3 install -r requirements.txt
 ```
+
+## End-to-End Test
+
+Send `get-config` or `edit-config` via `ansible-playbook`.
+
+### get-config
+
+```yaml
+---
+- name: ietf-interfaces_config
+  hosts: netopeer2
+  connection: netconf
+  gather_facts: no
+  vars:
+    netconf:
+      host: "{{ inventory_hostname }}"
+      port: "{{ ansible_ssh_port }}"
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_ssh_pass }}"
+      transport: netconf
+
+  tasks:
+    - name: ietf-interfaces_full
+        ietf-interfaces_config:
+        operation_type: get-config
+        interfaces: []
+        provider: "{{ netconf }}"
+```
+
+### set-config
+
+```yaml
+---
+- name: ietf-interfaces_config
+  hosts: netopeer2
+  connection: netconf
+  gather_facts: no
+  vars:
+    netconf:
+      host: "{{ inventory_hostname }}"
+      port: "{{ ansible_ssh_port }}"
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_ssh_pass }}"
+      transport: netconf
+
+  tasks:
+    - name: ietf-interfaces_full
+        ietf-interfaces_config:
+        operation_type: config
+        operation_specs:
+            - path: "/config/interfaces/interface[name=\"GigabitEthernet 3/0/1\"]"
+            operation: merge
+            - path: "/config/interfaces/interface[name=\"GigabitEthernet 3/0/1\"]/ipv4"
+            operation: merge
+        interfaces:
+            - interface:
+                name: "GigabitEthernet 3/0/1"
+                type: "ianaift:ethernetCsmacd"
+                ipv4:
+                - address:
+                    ip: "192.0.2.3"
+                    prefix-length: 32
+        provider: "{{ netconf }}"
+```
