@@ -47,6 +47,8 @@ Send `get-config` or `edit-config` via `ansible-playbook`.
 
 ### get-config
 
+Write playbook `get-config.yml`:
+
 ```yaml
 ---
 - name: ietf-interfaces_config
@@ -69,7 +71,15 @@ Send `get-config` or `edit-config` via `ansible-playbook`.
         provider: "{{ netconf }}"
 ```
 
-### set-config
+Send `get-config` by running playbook:
+
+```
+ansible-playbook -vvv get-config.yml
+```
+
+### edit-config
+
+Write playbook `edit-config.yml`:
 
 ```yaml
 ---
@@ -103,4 +113,10 @@ Send `get-config` or `edit-config` via `ansible-playbook`.
                     ip: "192.0.2.3"
                     prefix-length: 32
         provider: "{{ netconf }}"
+```
+
+Send `edit-config` by running playbook:
+
+```
+ansible-playbook -vvv edit-config.yml
 ```
