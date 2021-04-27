@@ -4,15 +4,12 @@ import os
 
 from lxml import etree
 
-import swagger_server
-from swagger_server.core.service import (
-    query_controller_config,
-    query_device_config,
-    query_device_info,
-)
-from swagger_server.core.util import make_response_json, make_response_xml, query_data
+import mediator_controller
 
-swagger_root = os.path.dirname(swagger_server.__file__)
+from ..core.service import query_controller_config, query_device_config, query_device_info
+from ..core.util import make_response_json, make_response_xml, query_data
+
+swagger_root = os.path.dirname(mediator_controller.__file__)
 swagger_test = os.path.join(swagger_root, "test")
 
 logger = logging.getLogger(__name__)

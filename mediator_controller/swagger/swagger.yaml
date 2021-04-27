@@ -40,7 +40,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.default_controller
+      x-openapi-router-controller: mediator_controller.controllers.default_controller
   /mediatorservice/get_controller_config:
     get:
       summary: get controller configuration
@@ -82,7 +82,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.default_controller
+      x-openapi-router-controller: mediator_controller.controllers.default_controller
   /mediatorservice/get_device_config:
     get:
       summary: get device configuration
@@ -124,7 +124,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.default_controller
+      x-openapi-router-controller: mediator_controller.controllers.default_controller
   /datastore/get_controller_config:
     get:
       summary: get controller configuration
@@ -166,7 +166,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/get_device_config:
     get:
       summary: get device configuration
@@ -208,7 +208,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/query_controller_config:
     get:
       summary: query controller configuration
@@ -264,7 +264,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/query_device_config:
     get:
       summary: query device configuration
@@ -320,7 +320,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/set_controller_config:
     post:
       summary: set controller configuration
@@ -346,7 +346,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/set_device_config:
     post:
       summary: set device configuration
@@ -372,7 +372,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/update_controller_config:
     post:
       summary: update controller configuration
@@ -398,7 +398,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
   /datastore/update_device_config:
     post:
       summary: update device configuration
@@ -424,7 +424,7 @@ paths:
               schema:
                 type: string
                 x-content-type: application/json
-      x-openapi-router-controller: swagger_server.controllers.datastore_controller
+      x-openapi-router-controller: mediator_controller.controllers.datastore_controller
 components:
   schemas:
     input_msg:

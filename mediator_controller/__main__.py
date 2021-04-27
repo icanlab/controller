@@ -2,9 +2,9 @@
 
 import connexion
 
-from swagger_server import encoder
-from swagger_server.config import init_logger, load_app_config
-from swagger_server.core.datastore import datastore
+from . import encoder
+from .config import init_logger, load_app_config
+from .core.datastore import datastore
 
 
 def main():

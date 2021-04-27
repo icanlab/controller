@@ -2,9 +2,9 @@ import json
 
 import connexion
 
-from swagger_server.core.datastore import datastore
-from swagger_server.core.util import make_response_json, make_response_xml, to_ele
-from swagger_server.models.input_msg import InputMsg
+from ..core.datastore import datastore
+from ..core.util import make_response_json, make_response_xml, to_ele
+from ..models.input_msg import InputMsg
 
 
 def datastore_get_controller_config_get(neid, source, module):  # noqa: E501

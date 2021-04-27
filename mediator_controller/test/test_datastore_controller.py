@@ -5,8 +5,8 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.input_msg import InputMsg  # noqa: E501
-from swagger_server.test import BaseTestCase
+from ..models.input_msg import InputMsg  # noqa: E501
+from . import BaseTestCase
 
 
 class TestDefaultController(BaseTestCase):
