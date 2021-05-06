@@ -131,7 +131,9 @@ def datastore_set_controller_config_post(body=None):  # noqa: E501
             res = {"errinfo": str(e)}
             return make_response_json(res, 400)
         return make_response_json({"ok": 200})
-    return "do some magic!"
+    else:
+        res = {"errinfo": "not json"}
+        return make_response_json(res, 400)
 
 
 def datastore_set_device_config_post(body=None):  # noqa: E501
@@ -156,7 +158,9 @@ def datastore_set_device_config_post(body=None):  # noqa: E501
             res = {"errinfo": str(e)}
             return make_response_json(res, 400)
         return make_response_json({"ok": 200})
-    return "do some magic!"
+    else:
+        res = {"errinfo": "not json"}
+        return make_response_json(res, 400)
 
 
 def datastore_update_controller_config_post(body=None):  # noqa: E501
@@ -181,7 +185,9 @@ def datastore_update_controller_config_post(body=None):  # noqa: E501
             res = {"errinfo": str(e)}
             return make_response_json(res, 400)
         return make_response_json({"ok": 200})
-    return "do some magic!"
+    else:
+        res = {"errinfo": "not json"}
+        return make_response_json(res, 400)
 
 
 def datastore_update_device_config_post(body=None):  # noqa: E501
@@ -206,4 +212,6 @@ def datastore_update_device_config_post(body=None):  # noqa: E501
             res = {"errinfo": str(e)}
             return make_response_json(res, 400)
         return make_response_json({"ok": 200})
-    return "do some magic!"
+    else:
+        res = {"errinfo": "not json"}
+        return make_response_json(res, 400)
