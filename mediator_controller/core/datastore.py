@@ -1,11 +1,13 @@
+import copy
+
 from lxml import etree
 from redis import Redis
 
 from .util import query_data, to_ele, to_xml
 
 
-def _resolve_module(ele):
-    return etree.QName(ele[0].tag).localname
+def _resolve_module(module_ele):
+    return etree.QName(module_ele.tag).localname
 
 
 def _ckey(neid, source, module):
@@ -50,27 +52,33 @@ class Datastore(object):
 
     def _set_config(self, key, ele):
         xml = to_xml(ele, pretty_print=True)
-        return self._redis.set(key, xml)  # type: ignore [union-attr]
+        self._redis.set(key, xml)  # type: ignore [union-attr]
 
     def set_controller_config(self, neid, source, module, ele):
         # NE 插件难以获取 module，因此 module 为空串时，datastore 从报文中推断 module。
         # 由于无法推断空配置的 module，故不存储空配置。
         if len(ele) == 0:
             return
-        if not module:
-            module = _resolve_module(ele)
-        key = _ckey(neid, source, module)
-        return self._set_config(key, ele)
+        for m in ele:
+            data = etree.Element("data")
+            data.append(copy.copy(m))
+            if not module:
+                module = _resolve_module(m)
+            key = _ckey(neid, source, module)
+            self._set_config(key, data)
 
     def set_device_config(self, neid, source, module, ele):
         # NE 插件难以获取 module，因此 module 为空串时，datastore 从报文中推断 module。
         # 由于无法推断空配置的 module，故不存储空配置。
         if len(ele) == 0:
             return
-        if not module:
-            module = _resolve_module(ele)
-        key = _dkey(neid, source, module)
-        return self._set_config(key, ele)
+        for m in ele:
+            data = etree.Element("data")
+            data.append(copy.copy(m))
+            if not module:
+                module = _resolve_module(m)
+            key = _dkey(neid, source, module)
+            self._set_config(key, data)
 
     # ======= #
     #  QUERY  #
