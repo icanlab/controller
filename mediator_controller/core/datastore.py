@@ -59,6 +59,7 @@ class Datastore(object):
         # 由于无法推断空配置的 module，故不存储空配置。
         if len(ele) == 0:
             return
+        # <data> 中可能有多个 module，分别存储。
         for m in ele:
             data = etree.Element("data")
             data.append(copy.copy(m))
@@ -72,6 +73,7 @@ class Datastore(object):
         # 由于无法推断空配置的 module，故不存储空配置。
         if len(ele) == 0:
             return
+        # <data> 中可能有多个 module，分别存储。
         for m in ele:
             data = etree.Element("data")
             data.append(copy.copy(m))
