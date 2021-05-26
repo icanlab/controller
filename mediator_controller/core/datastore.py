@@ -63,8 +63,7 @@ class Datastore(object):
         for m in ele:
             data = etree.Element("data")
             data.append(copy.copy(m))
-            if not module:
-                module = _resolve_module(m)
+            module = _resolve_module(m)
             key = _ckey(neid, source, module)
             self._set_config(key, data)
 
@@ -77,8 +76,7 @@ class Datastore(object):
         for m in ele:
             data = etree.Element("data")
             data.append(copy.copy(m))
-            if not module:
-                module = _resolve_module(m)
+            module = _resolve_module(m)
             key = _dkey(neid, source, module)
             self._set_config(key, data)
 
