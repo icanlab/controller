@@ -55,7 +55,7 @@ class Datastore(object):
         self._redis.set(key, xml)  # type: ignore [union-attr]
 
     def set_controller_config(self, neid, source, module, ele):
-        # NE 插件难以获取 module，因此 module 为空串时，datastore 从报文中推断 module。
+        # 由于报文中可能存在多个 module，现在 module 参数会被忽略，datastore 始终从报文中推断 module。
         # 由于无法推断空配置的 module，故不存储空配置。
         if len(ele) == 0:
             return
@@ -68,7 +68,7 @@ class Datastore(object):
             self._set_config(key, data)
 
     def set_device_config(self, neid, source, module, ele):
-        # NE 插件难以获取 module，因此 module 为空串时，datastore 从报文中推断 module。
+        # 由于报文中可能存在多个 module，现在 module 参数会被忽略，datastore 始终从报文中推断 module。
         # 由于无法推断空配置的 module，故不存储空配置。
         if len(ele) == 0:
             return
@@ -96,14 +96,29 @@ class Datastore(object):
     #  UPDATE  #
     # ======== #
 
-    def _update_config(self, config):
-        raise NotImplementedError
+    def update_controller_config(self, neid, source, module, xpath, namespaces, ele):
+        old = self.query_controller_config(neid, source, module, xpath, namespaces)
+        parent = old.getparent()
+        parent.replace(old, ele)
 
-    def update_controller_config(self, neid, source, module, config):
-        raise NotImplementedError
+    def update_device_config(self, neid, source, module, xpath, namespaces, ele):
+        old = self.query_device_config(neid, source, module, xpath, namespaces)
+        parent = old.getparent()
+        parent.replace(old, ele)
 
-    def update_device_config(self, neid, source, module, config):
-        raise NotImplementedError
+    # ======== #
+    #  DELETE  #
+    # ======== #
+
+    def delete_controller_config(self, neid, source, module, xpath, namespaces):
+        old = self.query_controller_config(neid, source, module, xpath, namespaces)
+        parent = old.getparent()
+        parent.remove(old)
+
+    def delete_device_config(self, neid, source, module, xpath, namespaces):
+        old = self.query_device_config(neid, source, module, xpath, namespaces)
+        parent = old.getparent()
+        parent.remove(old)
 
 
 datastore = Datastore()
