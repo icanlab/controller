@@ -33,15 +33,17 @@ def make_response_xml(element_or_tree, status=200, headers=None):
     )
 
 
-def _real_query_data(data_ele, xpath, namespaces):
-    result = data_ele.xpath("/data" + xpath, namespaces=namespaces)
-    # 查不到时返回空配置。
-    if len(result) == 0:
-        return etree.Element("data")
-    ele = copy.copy(result[0])
+def encapsulate_data(ele):
     data = etree.Element("data")
-    data.append(ele)
+    data.append(copy.copy(ele))
     return data
+
+
+def real_query_data(data_ele, xpath, namespaces):
+    result = data_ele.xpath("/data" + xpath, namespaces=namespaces)
+    if len(result) == 0:
+        return None
+    return result[0]
 
 
 def query_data(data_ele, xpath, namespaces):
@@ -49,7 +51,11 @@ def query_data(data_ele, xpath, namespaces):
     if n > 1:
         raise ValueError("data should have at most one subelement")
     if n == 1:
-        return _real_query_data(data_ele, xpath, namespaces)
+        result = real_query_data(data_ele, xpath, namespaces)
+        # 查不到时返回空配置。
+        if not result:
+            return etree.Element("data")
+        return encapsulate_data(result[0])
     if n == 0:
         return data_ele  # empty config
 
