@@ -60,6 +60,19 @@ def query_data(data_ele, xpath, namespaces):
         return data_ele  # empty config
 
 
+def replace_element(src, dst):
+    src_map = {e.tag: e for e in src}
+    dst_map = {e.tag: e for e in dst}
+    for tag, ele in dst_map.items():
+        src_ele = src_map.get(tag)
+        if src_ele is None:
+            src.append(copy.copy(ele))
+        if src_ele is not None and len(ele) > 0:  # 在 src 中，在 dst 中
+            replace_element(src_map[tag], ele)
+        else:
+            src_ele.getparent().replace(src_ele, copy.copy(ele))
+
+
 def trim_element(ele, top):
     if ele is top:
         return

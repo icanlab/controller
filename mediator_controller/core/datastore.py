@@ -3,7 +3,7 @@ import copy
 from lxml import etree
 from redis import Redis
 
-from .util import query_data, to_ele, to_xml, real_query_data
+from .util import query_data, real_query_data, replace_element, to_ele, to_xml
 
 
 def _resolve_module(module_ele):
@@ -96,15 +96,18 @@ class Datastore(object):
     #  UPDATE  #
     # ======== #
 
+    def _update_config(self, key, xpath, namespaces, ele):
+        config = self._get_config(key)
+        replace_element(config, ele)
+        self._set_config(key, config)
+
     def update_controller_config(self, neid, source, module, xpath, namespaces, ele):
-        old = self.query_controller_config(neid, source, module, xpath, namespaces)
-        parent = old.getparent()
-        parent.replace(old, ele)
+        key = _ckey(neid, source, module)
+        self._update_config(key, xpath, namespaces, ele)
 
     def update_device_config(self, neid, source, module, xpath, namespaces, ele):
-        old = self.query_device_config(neid, source, module, xpath, namespaces)
-        parent = old.getparent()
-        parent.replace(old, ele)
+        key = _ckey(neid, source, module)
+        self._update_config(key, xpath, namespaces, ele)
 
     # ======== #
     #  DELETE  #
@@ -116,7 +119,6 @@ class Datastore(object):
         parent = old.getparent()
         parent.remove(old)
         self._set_config(key, config)
-
 
     def delete_controller_config(self, neid, source, module, xpath, namespaces):
         key = _ckey(neid, source, module)
