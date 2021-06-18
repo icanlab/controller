@@ -1,4 +1,5 @@
 import copy
+import json
 
 from lxml import etree
 from redis import Redis
@@ -128,5 +129,111 @@ class Datastore(object):
         key = _ckey(neid, source, module)
         self._delete_config(key, xpath, namespaces)
 
+    # ======== #
+    #  XXXXXX  #
+    # ======== #
+
+    def update_redis_for_mediator(self, neid, source, type):
+        data_str = self._redis.get("temp_data")
+        data = json.loads(data_str)
+
+        module = data["module"]
+        if type == "controller":
+            key = _ckey(neid, source, module)
+        elif type == "device":
+            key = _dkey(neid, source, module)
+        else:
+            raise ValueError(f"unknown type {type!r}")
+
+        origin = self._get_config(key)
+
+        if data["operation"] == "delete":
+            xpath = data["xpath"]
+            namespaces = data["namespaces"]
+            delete_config(origin, xpath, namespaces)
+            self._set_config(key, origin)
+        else:
+            config = data["config"]
+            key_list = data["key_list"]
+            merge_config(origin, config, key_list)
+            self._set_config(key, origin)
+
 
 datastore = Datastore()
+
+
+def delete_config(origin, xpath, namespaces):
+    ele = origin.xpath(xpath, namespaces=namespaces)[0]
+    ele.getparent().remove(ele)
+
+
+def merge_config(origin, config, key_list):
+    currpath = "/data"
+    key_prefix_set = set()
+    key_name_set = set()
+    for key in key_list:
+        i = key.rfind("/")
+        key_prefix_set.add(key[:i])
+        key_name_set.add(key[i + 1 :])
+    _merge_config(origin, config, currpath, key_prefix_set, key_name_set)
+
+
+def _get_tag_map(ele):
+    return {etree.QName(child).localname: child for child in ele}
+
+
+def _get_key_tag_map(ele, key_name_set):
+    result = {}
+    for child in ele:
+        for x in child:
+            if etree.QName(x).localname in key_name_set:
+                result[x.text] = child
+                break
+    return result
+
+
+def _is_key_node(ele, currpath, key_prefix_set):
+    for child in ele:
+        path = currpath + "/" + etree.QName(child)
+        if path in key_prefix_set:
+            return True
+    return False
+
+
+def _merge_config(src, dst, currpath, key_prefix_set, key_name_set):
+    if len(dst) == 0 and dst.text:
+        src.text = dst.text
+        return
+
+    if _is_key_node(dst, currpath, key_prefix_set):
+        src_key_tag_map = _get_key_tag_map(src, key_name_set)
+        dst_key_tag_map = _get_key_tag_map(dst, key_name_set)
+        if not dst_key_tag_map:
+            return
+        for key_tag, ele in dst_key_tag_map.items():
+            if key_tag in src_key_tag_map:
+                _merge_config(
+                    src_key_tag_map[key_tag],
+                    ele,
+                    currpath + "/" + key_tag,
+                    key_prefix_set,
+                    key_name_set,
+                )
+            else:
+                src.append(copy.copy(ele))
+    else:
+        src_tag_map = _get_tag_map(src)
+        dst_tag_map = _get_tag_map(dst)
+        if not dst_tag_map:
+            return
+        for tag, ele in dst_tag_map.items():
+            if tag in src_tag_map:
+                _merge_config(
+                    src_tag_map[tag],
+                    ele,
+                    currpath + "/" + tag,
+                    key_prefix_set,
+                    key_name_set,
+                )
+            else:
+                src.append(copy.copy(ele))
