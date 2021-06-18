@@ -7,6 +7,10 @@ from ..core.util import make_response_json, make_response_xml, to_ele
 from ..models.input_msg import InputMsg
 
 
+def update_redis_for_mediator(neid, source, type):
+    datastore.update_redis_for_mediator(neid, source, type)
+
+
 def datastore_get_controller_config_get(neid, source, module):  # noqa: E501
     """get controller configuration
 
