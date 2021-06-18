@@ -158,6 +158,8 @@ class Datastore(object):
             merge_config(origin, config, key_list)
             self._set_config(key, origin)
 
+        self._redis.delete("temp_data")
+
 
 datastore = Datastore()
 
