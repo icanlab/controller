@@ -134,13 +134,15 @@ class Datastore(object):
     # ======== #
 
     def update_redis_for_mediator(self, neid, source, type):
-        data_str = self._redis.get("temp_data")
-        data = json.loads(data_str)
-
-        module = data["module"]
         if type == "controller":
+            data_str = self._redis.get("temp_data_controller")
+            data = json.loads(data_str)
+            module = data["module"]
             key = _ckey(neid, source, module)
         elif type == "device":
+            data_str = self._redis.get("temp_data_device")
+            data = json.loads(data_str)
+            module = data["module"]
             key = _dkey(neid, source, module)
         else:
             raise ValueError(f"unknown type {type!r}")
