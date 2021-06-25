@@ -1,5 +1,6 @@
 import copy
 import json
+import logging
 
 from lxml import etree
 from redis import Redis
@@ -165,10 +166,13 @@ class Datastore(object):
 
 datastore = Datastore()
 
+logger = logging.getLogger(__name__)
+
 
 def delete_config(origin, xpath, namespaces):
     ele = origin.xpath(xpath, namespaces=namespaces)[0]
     ele.getparent().remove(ele)
+    logger.debug(to_xml(origin, pretty_print=True).decode())
 
 
 def merge_config(origin, config, key_list):
@@ -180,6 +184,7 @@ def merge_config(origin, config, key_list):
         key_prefix_set.add(key[:i])
         key_name_set.add(key[i + 1 :])
     _merge_config(origin, config, currpath, key_prefix_set, key_name_set)
+    logger.debug(to_xml(origin, pretty_print=True).decode())
 
 
 def _get_tag_map(ele):

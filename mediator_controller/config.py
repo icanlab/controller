@@ -26,7 +26,7 @@ _DEFAULT_LOGGER_CONFIG = {
     },
     "loggers": {
         "mediator_controller": {
-            "level": "INFO",
+            "level": "DEBUG",
             "propagate": False,
             "handlers": ["default"],
         }
