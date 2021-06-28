@@ -135,20 +135,7 @@ class Datastore(object):
     #  XXXXXX  #
     # ======== #
 
-    def update_redis_for_mediator(self, neid, source, type):
-        if type == "controller":
-            data_str = self._redis.get("temp_data_controller")
-            data = json.loads(data_str)
-            module = data["module"]
-            key = _ckey(neid, source, module)
-        elif type == "device":
-            data_str = self._redis.get("temp_data_device")
-            data = json.loads(data_str)
-            module = data["module"]
-            key = _dkey(neid, source, module)
-        else:
-            raise ValueError(f"unknown type {type!r}")
-
+    def _update_redis_for_mediator(self, data, key):
         if "key_list" not in data:
             xpath = data["xpath"]
             # Strip namespace prefix
@@ -176,6 +163,25 @@ class Datastore(object):
             self._set_config(key, origin)
 
         self._redis.delete("temp_data")
+
+    def update_redis_for_mediator(self, neid, source, type):
+        if type == "controller":
+            data_str = self._redis.get("temp_data_controller")
+            data_list = json.loads(data_str)
+            for data in data_list:
+                module = data["module"]
+                key = _ckey(neid, source, module)
+                self._update_redis_for_mediator(data, key)
+
+        elif type == "device":
+            data_str = self._redis.get("temp_data_device")
+            data = json.loads(data_str)
+            module = data["module"]
+            key = _dkey(neid, source, module)
+            self._update_redis_for_mediator(data, key)
+
+        else:
+            raise ValueError(f"unknown type {type!r}")
 
 
 datastore = Datastore()
