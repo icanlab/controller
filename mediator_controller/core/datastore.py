@@ -162,8 +162,6 @@ class Datastore(object):
             merge_config(origin, config, key_list)
             self._set_config(key, origin)
 
-        self._redis.delete("temp_data")
-
     def update_redis_for_mediator(self, neid, source, type):
         if type == "controller":
             data_str = self._redis.get("temp_data_controller")
@@ -172,6 +170,7 @@ class Datastore(object):
                 module = data["module"]
                 key = _ckey(neid, source, module)
                 self._update_redis_for_mediator(data, key)
+            self._redis.delete("temp_data_controller")
 
         elif type == "device":
             data_str = self._redis.get("temp_data_device")
@@ -179,6 +178,7 @@ class Datastore(object):
             module = data["module"]
             key = _dkey(neid, source, module)
             self._update_redis_for_mediator(data, key)
+            self._redis.delete("temp_data_device")
 
         else:
             raise ValueError(f"unknown type {type!r}")
