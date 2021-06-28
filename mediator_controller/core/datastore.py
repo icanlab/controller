@@ -1,6 +1,7 @@
 import copy
 import json
 import logging
+import re
 
 from lxml import etree
 from redis import Redis
@@ -147,6 +148,19 @@ class Datastore(object):
             key = _dkey(neid, source, module)
         else:
             raise ValueError(f"unknown type {type!r}")
+
+        if "key_list" not in data:
+            xpath = data["xpath"]
+            # Strip namespace prefix
+            xpath = re.sub(r"(?:[^[/]+?:)", "", xpath)
+            path_list = []
+            i = xpath.find("]")
+            while i != -1:
+                path = xpath[: i + 1]
+                path = re.sub(r"\[(.+?)=.+?\]", r"/\1", path)
+                path_list.append(path)
+                i = xpath.find("]", i + 1)
+            data["key_list"] = path_list
 
         origin = self._get_config(key)
 
