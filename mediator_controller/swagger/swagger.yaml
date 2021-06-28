@@ -144,7 +144,7 @@ paths:
         explode: true
         schema:
           type: string
-      - name: type
+      - name: type_
         in: query
         required: true
         style: form

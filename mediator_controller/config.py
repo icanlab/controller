@@ -29,7 +29,12 @@ _DEFAULT_LOGGER_CONFIG = {
             "level": "DEBUG",
             "propagate": False,
             "handlers": ["default"],
-        }
+        },
+        # "connexion.operations.abstract": {
+        #     "level": "DEBUG",
+        #     "propagate": False,
+        #     "handlers": ["default"],
+        # }
     },
 }
 
