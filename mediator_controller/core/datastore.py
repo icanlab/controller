@@ -223,7 +223,7 @@ def _get_key_tag_map(ele, key_name_set):
 
 def _is_key_node(ele, currpath, key_prefix_set):
     for child in ele:
-        path = currpath + "/" + etree.QName(child)
+        path = currpath + "/" + etree.QName(child).localname
         if path in key_prefix_set:
             return True
     return False
