@@ -50,8 +50,8 @@ def real_query_data(data_ele, xpath, namespaces):
     results = data_ele.xpath("/data" + xpath, namespaces=namespaces)
     if len(results) == 0:
         return None
-    temp = _log_ele(results[0])
-    logger.info(f"real_query_data {temp}")
+    # temp = _log_ele(results[0])
+    # logger.info(f"real_query_data {temp}")
     return results[0]
 
 
@@ -61,14 +61,11 @@ def query_data(data_ele, xpath, namespaces):
     if n > 1:
         raise ValueError("data should have at most one subelement")
     if n == 1:
-        results = real_query_data(data_ele, xpath, namespaces)
+        result = real_query_data(data_ele, xpath, namespaces)
         # 查不到时返回空配置。
-        if results is None:
+        if result is None:
             return etree.Element("data")
-        result = encapsulate_data(results[0])
-        temp = _log_ele(result)
-        logger.info(f"query_data {result}")
-        return result
+        return encapsulate_data(result)
     if n == 0:
         return data_ele  # empty config
 
