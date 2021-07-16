@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import traceback
 
 from lxml import etree
 
@@ -93,7 +94,7 @@ def get_controller_config(neid, xpath, ns_map):  # noqa: E501
         controller_config = query_controller_config(neid, xpath, ns_map)
     except Exception as e:
         res = {"errinfo": str(e)}
-        print(json.dumps(res, indent=4))
+        traceback.print_exc()
         return make_response_json(res, 400)
     return make_response_xml(controller_config)
 
@@ -118,7 +119,7 @@ def get_device_config(neid, xpath, ns_map):  # noqa: E501
         device_config = query_device_config(neid, xpath, ns_map)
     except Exception as e:
         res = {"errinfo": str(e)}
-        print(json.dumps(res, indent=4))
+        traceback.print_exc()
         return make_response_json(res, 400)
     return make_response_xml(device_config)
 
@@ -138,6 +139,6 @@ def get_device_info(neid):  # noqa: E501
         device_info = query_device_info(neid)
     except Exception as e:
         res = {"errinfo": str(e)}
-        print(json.dumps(res, indent=4))
+        traceback.print_exc()
         return make_response_json(res, 400)
     return make_response_json(device_info)
