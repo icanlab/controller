@@ -36,6 +36,8 @@ class Datastore(object):
     # ===== #
 
     def _get_config(self, key):
+        # 返回的数据有 <data></data> 封装
+        logger.info(f"datastore_key={key}")
         xml = self._redis.get(key)  # type: ignore [union-attr]
         if xml is None:
             return etree.Element("data")

@@ -43,10 +43,15 @@ def real_query_data(data_ele, xpath, namespaces):
     result = data_ele.xpath("/data" + xpath, namespaces=namespaces)
     if len(result) == 0:
         return None
+    temp = to_xml(result[0])
+    if not isinstance(temp, str):
+        temp = temp.decode()
+    logger.info(f"real_query_data {temp}")
     return result[0]
 
 
 def query_data(data_ele, xpath, namespaces):
+    # data_ele: <data>...</data>
     n = len(data_ele)
     if n > 1:
         raise ValueError("data should have at most one subelement")
