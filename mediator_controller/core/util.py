@@ -39,15 +39,20 @@ def encapsulate_data(ele):
     return data
 
 
-def real_query_data(data_ele, xpath, namespaces):
-    result = data_ele.xpath("/data" + xpath, namespaces=namespaces)
-    if len(result) == 0:
-        return None
-    temp = to_xml(result[0])
+def _log_ele(ele):
+    temp = to_xml(ele)
     if not isinstance(temp, str):
         temp = temp.decode()
+    return temp
+
+
+def real_query_data(data_ele, xpath, namespaces):
+    results = data_ele.xpath("/data" + xpath, namespaces=namespaces)
+    if len(results) == 0:
+        return None
+    temp = _log_ele(results[0])
     logger.info(f"real_query_data {temp}")
-    return result[0]
+    return results[0]
 
 
 def query_data(data_ele, xpath, namespaces):
@@ -56,11 +61,14 @@ def query_data(data_ele, xpath, namespaces):
     if n > 1:
         raise ValueError("data should have at most one subelement")
     if n == 1:
-        result = real_query_data(data_ele, xpath, namespaces)
+        results = real_query_data(data_ele, xpath, namespaces)
         # 查不到时返回空配置。
-        if result is None:
+        if results is None:
             return etree.Element("data")
-        return encapsulate_data(result[0])
+        result = encapsulate_data(results[0])
+        temp = _log_ele(result)
+        logger.info(f"query_data {result}")
+        return result
     if n == 0:
         return data_ele  # empty config
 
