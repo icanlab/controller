@@ -205,7 +205,7 @@ def merge_config(origin, config, key_list):
         key_prefix_set.add(key[:i])
         key_name_set.add(key[i + 1 :])
     _merge_config(origin, config, currpath, key_prefix_set, key_name_set)
-    logger.debug(to_xml(origin, pretty_print=True).decode())
+    #logger.debug(to_xml(origin, pretty_print=True).decode())
 
 
 def _get_tag_map(ele):

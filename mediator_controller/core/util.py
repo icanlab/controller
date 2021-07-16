@@ -53,7 +53,7 @@ def query_data(data_ele, xpath, namespaces):
     if n == 1:
         result = real_query_data(data_ele, xpath, namespaces)
         # 查不到时返回空配置。
-        if not result:
+        if result is None:
             return etree.Element("data")
         return encapsulate_data(result[0])
     if n == 0:
