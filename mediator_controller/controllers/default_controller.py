@@ -96,6 +96,7 @@ def get_controller_config(neid, xpath, ns_map):  # noqa: E501
         res = {"errinfo": str(e)}
         traceback.print_exc()
         return make_response_json(res, 400)
+    logger.info(f"neid={neid} xpath={xpath} ns_map={ns_map}")
     return make_response_xml(controller_config)
 
 
@@ -121,6 +122,7 @@ def get_device_config(neid, xpath, ns_map):  # noqa: E501
         res = {"errinfo": str(e)}
         traceback.print_exc()
         return make_response_json(res, 400)
+    logger.info(f"neid={neid} xpath={xpath} ns_map={ns_map}")
     return make_response_xml(device_config)
 
 
