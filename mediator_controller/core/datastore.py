@@ -157,7 +157,8 @@ class Datastore(object):
             delete_config(origin, xpath, namespaces)
             self._set_config(key, origin)
         else:
-            config = to_ele(data["config"])
+            # Add <data></data>.
+            config = to_ele("<data>" + data["config"] + "</data>")
             key_list = data["key_list"]
             merge_config(origin, config, key_list)
             self._set_config(key, origin)
